@@ -20,8 +20,6 @@ Dependencies: none
 
 using namespace std;
 
-const float GRAVITATIONAL_CONSTANT = 6.673e-11;
-
 class Body {
 	public:
 		float mass, x, y;
@@ -31,22 +29,7 @@ class Body {
 		float gravitationalForceBetweenBody(Body);
 };
 
-void Body::moveTo(float xNew, float yNew) {
-	x = xNew;
-	y = yNew;
-}
-
-void Body::setMass(float massNew) {
-	mass = massNew;
-}
-
-float Body::distanceFromBody(Body body2) {
-	return sqrt(pow((body2.x - x), 2) + pow((body2.y - y), 2));
-}
-
-float Body::gravitationalForceBetweenBody(Body body2) {
-	return ((GRAVITATIONAL_CONSTANT * mass * body2.mass) / pow(this->distanceFromBody(body2), 2));
-}
+const float GRAVITATIONAL_CONSTANT = 6.673e-11;
 
 bool readFile(int &seed, Body &body1, Body &body2);
 int getMenuChoice(void);
@@ -178,4 +161,23 @@ bool readFile(int &seed, Body &body1, Body &body2) {
 	body2.moveTo(x, y);
 	
 	return true;
+}
+
+// Body class methods:
+
+void Body::moveTo(float xNew, float yNew) {
+	x = xNew;
+	y = yNew;
+}
+
+void Body::setMass(float massNew) {
+	mass = massNew;
+}
+
+float Body::distanceFromBody(Body body2) {
+	return sqrt(pow((body2.x - x), 2) + pow((body2.y - y), 2));
+}
+
+float Body::gravitationalForceBetweenBody(Body body2) {
+	return ((GRAVITATIONAL_CONSTANT * mass * body2.mass) / pow(this->distanceFromBody(body2), 2));
 }
