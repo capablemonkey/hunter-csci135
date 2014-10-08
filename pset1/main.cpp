@@ -22,24 +22,38 @@ using namespace std;
 
 class Body {
 	public:
+		int id;
 		float mass, x, y;
-		void moveTo(float, float);
+
+		Body(int);
+		void moveToPosition(float, float);
+		void moveByDistanceAndDirection(float, int);
 		void setMass(float);
+		void printMassAndPosition(void);
+
 		float distanceFromBody(Body);
 		float gravitationalForceBetweenBody(Body);
 };
 
+// Constants:
 const float GRAVITATIONAL_CONSTANT = 6.673e-11;
+const float RANDOM_DISTANCE_MAX = 1000.00;
+const float RANDOM_DISTANCE_MIN = 10.00;
+const int RANDOM_DIRECTION_MAX = 359;
+const int RANDOM_DIRECTION_MIN = 0;
 
+// Function prototypes:
 bool readFile(int &seed, Body &body1, Body &body2);
 int getMenuChoice(void);
 void displayBodies(Body body1, Body body2);
 void displayGravitationalForce(Body body1, Body body2);
 void displayDistanceBetweenBodies(Body body1, Body body2);
+void moveRandom(Body &body);
 
 int main() {
 	int seed;
-	Body body1, body2;
+	Body body1(1);
+	Body body2(2);
 
 	// read in file; if error, complain and exit
 	bool readSuccess = readFile(seed, body1, body2);
@@ -67,6 +81,14 @@ int main() {
 				displayDistanceBetweenBodies(body1, body2);
 				break;
 
+			case 3:
+				moveRandom(body1);
+				break;
+
+			case 4:
+				moveRandom(body2);
+				break;
+
 			default: 
 				cout << "Invalid choice.  Try again." << endl;
 		}
@@ -77,13 +99,28 @@ int main() {
 	return 0;
 }
 
-void displayBodies(Body body1, Body body2) {
-	// TODO: add a method to Body which prints itself, so we can do Body.print();
+//
+void moveRandom(Body &body) {
+	float randomDistance = float(rand() * 1.0 / RAND_MAX) * (
+		RANDOM_DISTANCE_MAX - RANDOM_DISTANCE_MIN) + RANDOM_DISTANCE_MIN;
+	int randomDirection = float(rand() * 1.0 / RAND_MAX) * (
+		RANDOM_DIRECTION_MAX - RANDOM_DIRECTION_MIN) + RANDOM_DIRECTION_MIN;
 
-	cout << endl
-		<< "Body #1: " << body1.mass << " kg @ (" << body1.x << ", " << body1.y << ")" << endl
-		<< "Body #2: " << body2.mass << " kg @ (" << body2.x << ", " << body2.y << ")" << endl
-		<< endl;
+	cout 	<< endl << "Moving Body #" << body.id 
+				<< " " << randomDistance << " meters in direction " 
+				<< randomDirection << " degrees" << endl;
+	
+	body.moveByDistanceAndDirection(randomDistance, randomDirection);
+
+	cout 	<< "Updated position for Body #" << body.id 
+				<< ": (" << body.x << ", " << body.y << ")" << endl;
+}
+
+void displayBodies(Body body1, Body body2) {
+	cout << endl;
+	body1.printMassAndPosition();
+	body2.printMassAndPosition();
+	cout << endl;
 
 	return;
 } 
@@ -150,7 +187,7 @@ bool readFile(int &seed, Body &body1, Body &body2) {
 	if (!(buffer1 >> mass >> x >> y)) { return false; }
 
 	body1.setMass(mass);
-	body1.moveTo(x, y);
+	body1.moveToPosition(x, y);
 
 	// read in line 3 / body2:
 	getline(inputFile, line);
@@ -158,14 +195,19 @@ bool readFile(int &seed, Body &body1, Body &body2) {
 	if (!(buffer2 >> mass >> x >> y)) { return false; }
 
 	body2.setMass(mass);
-	body2.moveTo(x, y);
+	body2.moveToPosition(x, y);
 	
 	return true;
 }
 
 // Body class methods:
 
-void Body::moveTo(float xNew, float yNew) {
+// constructor just takes a body number
+Body::Body(int idNew) {
+	id = idNew;
+}
+
+void Body::moveToPosition(float xNew, float yNew) {
 	x = xNew;
 	y = yNew;
 }
@@ -180,4 +222,13 @@ float Body::distanceFromBody(Body body2) {
 
 float Body::gravitationalForceBetweenBody(Body body2) {
 	return ((GRAVITATIONAL_CONSTANT * mass * body2.mass) / pow(this->distanceFromBody(body2), 2));
+}
+
+void Body::printMassAndPosition() {
+	cout << "Body #" << id << ": " << mass << " kg @ (" << x << ", " << y << ")" << endl;
+}
+
+void Body::moveByDistanceAndDirection(float distance, int direction) {
+	x = x + distance * cos(direction);
+	y = y + distance * sin(direction);
 }
