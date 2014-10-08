@@ -26,7 +26,9 @@ class Body {
 		float mass, x, y;
 
 		Body(int);
-		void moveToPosition(float, float);
+		void setPosition(float, float);
+		void moveRandom();
+		void moveByPromptingUser();
 		void moveByDistanceAndDirection(float, int);
 		void setMass(float);
 		void printMassAndPosition(void);
@@ -37,10 +39,10 @@ class Body {
 
 // Constants:
 const float GRAVITATIONAL_CONSTANT = 6.673e-11;
-const float RANDOM_DISTANCE_MAX = 1000.00;
-const float RANDOM_DISTANCE_MIN = 10.00;
-const int RANDOM_DIRECTION_MAX = 359;
-const int RANDOM_DIRECTION_MIN = 0;
+const float DISTANCE_MAX = 1000.00;
+const float DISTANCE_MIN = 10.00;
+const int DIRECTION_MAX = 359;
+const int DIRECTION_MIN = 0;
 
 // Function prototypes:
 bool readFile(int &seed, Body &body1, Body &body2);
@@ -48,7 +50,6 @@ int getMenuChoice(void);
 void displayBodies(Body body1, Body body2);
 void displayGravitationalForce(Body body1, Body body2);
 void displayDistanceBetweenBodies(Body body1, Body body2);
-void moveRandom(Body &body);
 
 int main() {
 	int seed;
@@ -82,11 +83,19 @@ int main() {
 				break;
 
 			case 3:
-				moveRandom(body1);
+				body1.moveRandom();
 				break;
 
 			case 4:
-				moveRandom(body2);
+				body2.moveRandom();
+				break;
+
+			case 5:
+				body1.moveByPromptingUser();
+				break;
+
+			case 6:
+				body2.moveByPromptingUser();
 				break;
 
 			default: 
@@ -97,23 +106,6 @@ int main() {
 		choice = getMenuChoice();
 	}
 	return 0;
-}
-
-//
-void moveRandom(Body &body) {
-	float randomDistance = float(rand() * 1.0 / RAND_MAX) * (
-		RANDOM_DISTANCE_MAX - RANDOM_DISTANCE_MIN) + RANDOM_DISTANCE_MIN;
-	int randomDirection = float(rand() * 1.0 / RAND_MAX) * (
-		RANDOM_DIRECTION_MAX - RANDOM_DIRECTION_MIN) + RANDOM_DIRECTION_MIN;
-
-	cout 	<< endl << "Moving Body #" << body.id 
-				<< " " << randomDistance << " meters in direction " 
-				<< randomDirection << " degrees" << endl;
-	
-	body.moveByDistanceAndDirection(randomDistance, randomDirection);
-
-	cout 	<< "Updated position for Body #" << body.id 
-				<< ": (" << body.x << ", " << body.y << ")" << endl;
 }
 
 void displayBodies(Body body1, Body body2) {
@@ -187,7 +179,7 @@ bool readFile(int &seed, Body &body1, Body &body2) {
 	if (!(buffer1 >> mass >> x >> y)) { return false; }
 
 	body1.setMass(mass);
-	body1.moveToPosition(x, y);
+	body1.setPosition(x, y);
 
 	// read in line 3 / body2:
 	getline(inputFile, line);
@@ -195,7 +187,7 @@ bool readFile(int &seed, Body &body1, Body &body2) {
 	if (!(buffer2 >> mass >> x >> y)) { return false; }
 
 	body2.setMass(mass);
-	body2.moveToPosition(x, y);
+	body2.setPosition(x, y);
 	
 	return true;
 }
@@ -207,7 +199,7 @@ Body::Body(int idNew) {
 	id = idNew;
 }
 
-void Body::moveToPosition(float xNew, float yNew) {
+void Body::setPosition(float xNew, float yNew) {
 	x = xNew;
 	y = yNew;
 }
@@ -220,6 +212,7 @@ float Body::distanceFromBody(Body body2) {
 	return sqrt(pow((body2.x - x), 2) + pow((body2.y - y), 2));
 }
 
+// calculate gravitational force between this body and another
 float Body::gravitationalForceBetweenBody(Body body2) {
 	return ((GRAVITATIONAL_CONSTANT * mass * body2.mass) / pow(this->distanceFromBody(body2), 2));
 }
@@ -231,4 +224,64 @@ void Body::printMassAndPosition() {
 void Body::moveByDistanceAndDirection(float distance, int direction) {
 	x = x + distance * cos(direction);
 	y = y + distance * sin(direction);
+}
+
+// move body random distance and direction
+void Body::moveRandom() {
+	float randomDistance = float(rand() * 1.0 / RAND_MAX) * (
+		DISTANCE_MAX - DISTANCE_MIN) + DISTANCE_MIN;
+	int randomDirection = float(rand() * 1.0 / RAND_MAX) * (
+		DIRECTION_MAX - DIRECTION_MIN) + DIRECTION_MIN;
+
+	cout 	<< endl << "Moving Body #" << id 
+				<< " " << randomDistance << " meters in direction " 
+				<< randomDirection << " degrees" << endl;
+	
+	this->moveByDistanceAndDirection(randomDistance, randomDirection);
+
+	cout 	<< "Updated position for Body #" << id 
+				<< ": (" << x << ", " << y << ")" << endl;
+}
+
+// Move by user-inputted direction and distance
+void Body::moveByPromptingUser() {
+	float distance;
+	int direction;
+	bool validDistance = false;
+	bool validDirection = false;
+
+	// prompt user for distance:
+	while (!validDistance) {
+		cout << "Move body #" << id << " by this distance (meters): ";
+		cin >> distance;
+
+		if (!(distance >= DISTANCE_MIN && distance <= DISTANCE_MAX)) { 
+			cout 	<< "Distance must be between " << DISTANCE_MIN 
+						<< " and " << DISTANCE_MAX << ".  Try again." << endl;
+		} else { 
+			validDistance = true; 
+		}
+	}
+
+	// prompt user for direction:
+	while (!validDirection) {
+		cout << "Move body #" << id << " in this direction (degrees): ";
+		cin >> direction;
+
+		if (!(direction >= DIRECTION_MIN && direction <= DIRECTION_MAX)) { 
+			cout 	<< "Direction must be between " << DIRECTION_MIN 
+						<< " and " << DIRECTION_MAX << ".  Try again." << endl;
+		} else {
+			validDirection = true;
+		}
+	}
+
+	cout 	<< endl << "Moving Body #" << id 
+				<< " " << distance << " meters in direction " 
+				<< direction << " degrees" << endl;
+	
+	this->moveByDistanceAndDirection(distance, direction);
+
+	cout 	<< "Updated position for Body #" << id 
+				<< ": (" << x << ", " << y << ")" << endl;
 }
