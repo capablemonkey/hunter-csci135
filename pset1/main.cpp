@@ -126,8 +126,6 @@ void displayGravitationalForce(Body body1, Body body2) {
   // configure floats to be formatted to 5 dec places:
   cout.precision(5);
 
-  float gravitationalForce;
-
   cout  << "Gravitational Force between bodies: " 
         << body1.gravitationalForceBetweenBody(body2) << " Newtons" << endl;
 
