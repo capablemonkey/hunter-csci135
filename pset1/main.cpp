@@ -26,13 +26,14 @@ class Body {
 		float mass, x, y;
 
 		Body(int);
+		void printMassAndPosition(void);
 		void setPosition(float, float);
+		void setMass(float);
+
 		void moveRandom();
 		void moveByPromptingUser();
 		void moveByDistanceAndDirection(float, int);
-		void setMass(float);
-		void printMassAndPosition(void);
-
+		
 		float distanceFromBody(Body);
 		float gravitationalForceBetweenBody(Body);
 };
@@ -127,6 +128,8 @@ void displayGravitationalForce(Body body1, Body body2) {
 
 	cout 	<< "Gravitational Force between bodies: " 
 				<< body1.gravitationalForceBetweenBody(body2) << " Newtons" << endl;
+
+	return;
 }
 
 void displayDistanceBetweenBodies(Body body1, Body body2) {
@@ -135,7 +138,9 @@ void displayDistanceBetweenBodies(Body body1, Body body2) {
   cout.setf(ios::showpoint);
 	cout.precision(5);
 
-	cout << "Distance between bodies: " << body1.distanceFromBody(body2) << " Meters" << endl;
+	cout << "Distance between bodies: " 
+			 << body1.distanceFromBody(body2) << " Meters" << endl;
+	return;
 }
 
 // display menu to user; return choice
@@ -143,7 +148,8 @@ int getMenuChoice(void) {
 	int choice;
 
 	cout << endl << "============== Menu ==============" << endl
-		<< "1 Calculate the gravitational attractive force between the two bodies" << endl
+		<< "1 Calculate the gravitational attractive force between the two bodies" 
+		<< endl
 		<< "2 Calculate the distance between the two bodies" << endl
 		<< "3 Move body #1 a random distance and direction" << endl
 		<< "4 Move body #2 a random distance and direction" << endl
@@ -197,15 +203,18 @@ bool readFile(int &seed, Body &body1, Body &body2) {
 // constructor just takes a body number
 Body::Body(int idNew) {
 	id = idNew;
+	return;
 }
 
 void Body::setPosition(float xNew, float yNew) {
 	x = xNew;
 	y = yNew;
+	return;
 }
 
 void Body::setMass(float massNew) {
 	mass = massNew;
+	return;
 }
 
 float Body::distanceFromBody(Body body2) {
@@ -214,16 +223,20 @@ float Body::distanceFromBody(Body body2) {
 
 // calculate gravitational force between this body and another
 float Body::gravitationalForceBetweenBody(Body body2) {
-	return ((GRAVITATIONAL_CONSTANT * mass * body2.mass) / pow(this->distanceFromBody(body2), 2));
+	return ((GRAVITATIONAL_CONSTANT * mass * body2.mass) 
+		/ pow(this->distanceFromBody(body2), 2));
 }
 
 void Body::printMassAndPosition() {
-	cout << "Body #" << id << ": " << mass << " kg @ (" << x << ", " << y << ")" << endl;
+	cout 	<< "Body #" << id << ": " 
+				<< mass << " kg @ (" << x << ", " << y << ")" << endl;
+	return;
 }
 
 void Body::moveByDistanceAndDirection(float distance, int direction) {
 	x = x + distance * cos(direction);
 	y = y + distance * sin(direction);
+	return;
 }
 
 // move body random distance and direction
@@ -241,6 +254,8 @@ void Body::moveRandom() {
 
 	cout 	<< "Updated position for Body #" << id 
 				<< ": (" << x << ", " << y << ")" << endl;
+
+	return;
 }
 
 // Move by user-inputted direction and distance
@@ -284,4 +299,6 @@ void Body::moveByPromptingUser() {
 
 	cout 	<< "Updated position for Body #" << id 
 				<< ": (" << x << ", " << y << ")" << endl;
+
+	return;
 }
