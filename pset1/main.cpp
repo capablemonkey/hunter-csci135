@@ -64,6 +64,10 @@ int main() {
     return 1; 
   }
 
+  // configure float printing:
+  cout.setf(ios::fixed);
+  cout.setf(ios::showpoint);
+
   // set seed to time if given seed is 0
   if (seed == 0) { seed = time(NULL); }
   srand(seed);
@@ -120,8 +124,6 @@ void displayBodies(Body body1, Body body2) {
 
 void displayGravitationalForce(Body body1, Body body2) {
   // configure floats to be formatted to 5 dec places:
-  cout.setf(ios::fixed);
-  cout.setf(ios::showpoint);
   cout.precision(5);
 
   float gravitationalForce;
@@ -134,8 +136,6 @@ void displayGravitationalForce(Body body1, Body body2) {
 
 void displayDistanceBetweenBodies(Body body1, Body body2) {
   // configure floats to be formatted to 5 dec places:
-  cout.setf(ios::fixed);
-  cout.setf(ios::showpoint);
   cout.precision(5);
 
   cout << "Distance between bodies: " 
@@ -228,6 +228,7 @@ float Body::gravitationalForceBetweenBody(Body body2) {
 }
 
 void Body::printMassAndPosition() {
+  cout.precision(2);
   cout  << "Body #" << id << ": " 
         << mass << " kg @ (" << x << ", " << y << ")" << endl;
   return;
@@ -245,6 +246,8 @@ void Body::moveRandom() {
     DISTANCE_MAX - DISTANCE_MIN) + DISTANCE_MIN;
   int randomDirection = float(rand() * 1.0 / RAND_MAX) * (
     DIRECTION_MAX - DIRECTION_MIN) + DIRECTION_MIN;
+
+  cout.precision(2);
 
   cout  << endl << "Moving Body #" << id 
         << " " << randomDistance << " meters in direction " 
@@ -290,6 +293,8 @@ void Body::moveByPromptingUser() {
       validDirection = true;
     }
   }
+
+  cout.precision(2);
 
   cout  << endl << "Moving Body #" << id 
         << " " << distance << " meters in direction " 
