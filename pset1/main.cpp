@@ -44,6 +44,7 @@ const float DISTANCE_MAX = 1000.00;
 const float DISTANCE_MIN = 10.00;
 const int DIRECTION_MAX = 359;
 const int DIRECTION_MIN = 0;
+const float PI = acos(-1);
 
 // Function prototypes:
 bool readFile(int &seed, Body &body1, Body &body2);
@@ -233,8 +234,11 @@ void Body::printMassAndPosition() {
 }
 
 void Body::moveByDistanceAndDirection(float distance, int direction) {
-  x = x + distance * cos(direction);
-  y = y + distance * sin(direction);
+  float directionRadians = direction * (PI / 180.00);
+
+  x = x + distance * cos(directionRadians);
+  y = y + distance * sin(directionRadians);
+
   return;
 }
 
