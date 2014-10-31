@@ -20,7 +20,7 @@ double getDistanceBetweenBodies(Body body1, Body body2) {
 //        for getClosestBodies, getFurthestBodies, and 
 //         getAverageDistanceBetweenBodies
 
-void BodyCollection::getClosestBodies(Body* resultList[2]) {
+BodyPair BodyCollection::getClosestBodies() {
   // start off by comparing the first and second Bodies
   double shortestDistance = getDistanceBetweenBodies(bodiesList[0], bodiesList[1]);
 
@@ -47,14 +47,15 @@ void BodyCollection::getClosestBodies(Body* resultList[2]) {
     }
   }
 
-  // place pointers to the closest bodies into the results pointer array
-  resultList[0] = currentClosestPairBody1;
-  resultList[1] = currentClosestPairBody2;
+  BodyPair result;
+  result.firstBody = currentClosestPairBody1;
+  result.secondBody = currentClosestPairBody2;
+  result.distance = shortestDistance;
 
-  return;
+  return result;
 }
 
-void BodyCollection::getFurthestBodies(Body* resultList[2]) {
+BodyPair BodyCollection::getFurthestBodies() {
   // start off by comparing the first and second Bodies
   double furthestDistance = getDistanceBetweenBodies(bodiesList[0], bodiesList[1]);
   
@@ -82,10 +83,13 @@ void BodyCollection::getFurthestBodies(Body* resultList[2]) {
   }
 
   // place pointers to the Furthest bodies into the results pointer array
-  resultList[0] = currentFurthestPairBody1;
-  resultList[1] = currentFurthestPairBody2;
 
-  return;
+  BodyPair result;
+  result.firstBody = currentFurthestPairBody1;
+  result.secondBody = currentFurthestPairBody2;
+  result.distance = furthestDistance;
+
+  return result;
 }
 
 // void sortBodiesListByLabel(Body &bodiestList[], int bodiesListCount) {

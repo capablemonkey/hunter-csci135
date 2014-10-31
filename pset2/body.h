@@ -27,20 +27,20 @@ class Body {
 };
 
 struct BodyPair {
-  Body firstBody;
-  Body secondBody;
+  Body* firstBody;
+  Body* secondBody;
   double distance;
 };
 
 class BodyCollection {
-	public:
+	private:
 		Body bodiesList[BODIES_COUNT_MAX];
+	public:
 		int bodiesListCount;
-
 		BodyCollection() {};
 		bool createBodiesFromFile(std::string inputFileName);
-		void getClosestBodies(Body* resultList[2]);
-		void getFurthestBodies(Body* resultList[2]);
+		BodyPair getClosestBodies();
+		BodyPair getFurthestBodies();
 		double getAverageDistanceBetweenBodies();
 		double getVolumeOfBoxBoundingBodies();
 };
