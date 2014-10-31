@@ -23,10 +23,18 @@ class Body {
     std::string getLabel() { return label; }
 };
 
+// class BodyCollection {
+// 	public:
+// 		Body bodies[]
+// 		BodyCollection(Body bodiesList[]) {}
+// };
+
 bool createBodiesFromFile(std::string inputFileName, Body bodiesList[], int &bodiesListCount);
 
 double getDistanceBetweenBodies(Body body1, Body body2);
 
-void getClosestBodies(Body bodiesList[], Body resultList[]);
+void getClosestBodies(Body bodiesList[], int bodiesListCount, Body* resultList[2]);
+void getFurthestBodies(Body bodiesList[], int bodiesListCount, Body* resultList[2]);
+double getAverageDistanceBetweenBodies(Body bodiestList[], int bodiesListCount);
 
 #endif

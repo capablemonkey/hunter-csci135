@@ -46,12 +46,15 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
-  // cout << getDistanceBetweenBodies(bodiesList[0], bodiesList[1]);
+  Body* closestBodies[2];
+  Body* furthestBodies[2];
+  getClosestBodies(bodiesList, bodiesListCount, closestBodies);
+  getFurthestBodies(bodiesList, bodiesListCount, furthestBodies);
 
-  Body closestBodies[1];
-  getClosestBodies(bodiesList, closestBodies);
+  cout << "closest " << closestBodies[0]->getLabel() << " " << closestBodies[1]->getLabel() << endl;
+  cout << "furthest" << furthestBodies[0]->getLabel() << " " << furthestBodies[1]->getLabel() << endl;
 
-  cout << closestBodies[0].getLabel() << " " << closestBodies[1].getLabel() << endl;
-
+  double averageDistance = getAverageDistanceBetweenBodies(bodiesList, bodiesListCount);
+  cout << "average dist: " << averageDistance << endl;
   return 0;
 }
