@@ -10,6 +10,9 @@
 const bool READ_BODIES_FAILED = true;
 const bool READ_BODIES_SUCCESS = false;
 
+const int BODIES_COUNT_MAX = 36;
+const int BODIES_COUNT_MIN = 3;
+
 class Body {
   private:
     std::string label;
@@ -23,19 +26,25 @@ class Body {
     std::string getLabel() { return label; }
 };
 
-// class BodyCollection {
-// 	public:
-// 		Body bodies[]
-// 		BodyCollection(Body bodiesList[]) {}
-// };
+struct BodyPair {
+  Body firstBody;
+  Body secondBody;
+  double distance;
+};
 
-bool createBodiesFromFile(std::string inputFileName, Body bodiesList[], int &bodiesListCount);
+class BodyCollection {
+	public:
+		Body bodiesList[BODIES_COUNT_MAX];
+		int bodiesListCount;
+
+		BodyCollection() {};
+		bool createBodiesFromFile(std::string inputFileName);
+		void getClosestBodies(Body* resultList[2]);
+		void getFurthestBodies(Body* resultList[2]);
+		double getAverageDistanceBetweenBodies();
+		double getVolumeOfBoxBoundingBodies();
+};
 
 double getDistanceBetweenBodies(Body body1, Body body2);
-
-void getClosestBodies(Body bodiesList[], int bodiesListCount, Body* resultList[2]);
-void getFurthestBodies(Body bodiesList[], int bodiesListCount, Body* resultList[2]);
-double getAverageDistanceBetweenBodies(Body bodiestList[], int bodiesListCount);
-double getVolumeOfBoxBoundingBodies(Body bodiesList[], int bodiesListCount);
 
 #endif

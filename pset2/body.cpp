@@ -20,7 +20,7 @@ double getDistanceBetweenBodies(Body body1, Body body2) {
 //        for getClosestBodies, getFurthestBodies, and 
 //         getAverageDistanceBetweenBodies
 
-void getClosestBodies(Body bodiesList[], int bodiesListCount, Body* resultList[2]) {
+void BodyCollection::getClosestBodies(Body* resultList[2]) {
   // start off by comparing the first and second Bodies
   double shortestDistance = getDistanceBetweenBodies(bodiesList[0], bodiesList[1]);
 
@@ -54,7 +54,7 @@ void getClosestBodies(Body bodiesList[], int bodiesListCount, Body* resultList[2
   return;
 }
 
-void getFurthestBodies(Body bodiesList[], int bodiesListCount, Body* resultList[2]) {
+void BodyCollection::getFurthestBodies(Body* resultList[2]) {
   // start off by comparing the first and second Bodies
   double furthestDistance = getDistanceBetweenBodies(bodiesList[0], bodiesList[1]);
   
@@ -88,7 +88,11 @@ void getFurthestBodies(Body bodiesList[], int bodiesListCount, Body* resultList[
   return;
 }
 
-double getVolumeOfBoxBoundingBodies(Body bodiesList[], int bodiesListCount) {
+// void sortBodiesListByLabel(Body &bodiestList[], int bodiesListCount) {
+
+// }
+
+double BodyCollection::getVolumeOfBoxBoundingBodies() {
   // keep track of lowest and highest X, Y, and Z values:
   double lowestX, lowestY, lowestZ, highestX, highestY, highestZ;
 
@@ -116,7 +120,7 @@ double getVolumeOfBoxBoundingBodies(Body bodiesList[], int bodiesListCount) {
   return (highestX - lowestX) * (highestY - lowestY) * (highestZ - lowestZ);
 }
 
-double getAverageDistanceBetweenBodies(Body bodiesList[], int bodiesListCount) {
+double BodyCollection::getAverageDistanceBetweenBodies() {
   double sum = 0;
   int distancesCount = 0;
 
@@ -130,7 +134,7 @@ double getAverageDistanceBetweenBodies(Body bodiesList[], int bodiesListCount) {
   return sum / distancesCount;
 }
 
-bool createBodiesFromFile(std::string inputFileName, Body bodiesList[], int &bodiesListCount) {
+bool BodyCollection::createBodiesFromFile(std::string inputFileName) {
   // read file, map lines to Body objects:
   std::ifstream inputFile;
   inputFile.open(inputFileName, std::ios_base::in);
@@ -159,9 +163,9 @@ bool createBodiesFromFile(std::string inputFileName, Body bodiesList[], int &bod
       return READ_BODIES_FAILED;
     }
 
-    // create new Body and assign it as array element; keep count of bodies
-    bodiesList[bodiesListCount] = Body(label, x, y, z);
-    bodiesListCount++;
+    // create new Body and add it to the BodyCollection
+    this->bodiesList[bodiesListCount] = Body(label, x, y, z);
+    this->bodiesListCount++;
   }
 
   return READ_BODIES_SUCCESS;

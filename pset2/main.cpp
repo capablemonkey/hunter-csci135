@@ -14,9 +14,6 @@ Dependencies: none
 #import <iostream>
 #import "body.h"
 
-const int BODIES_COUNT_MAX = 36;
-const int BODIES_COUNT_MIN = 3;
-
 using namespace std;
 
 int main(int argc, char *argv[]) {
@@ -32,16 +29,15 @@ int main(int argc, char *argv[]) {
   string outputFileName2 = argv[3];
 
   // store all bodies into this array:
-  Body bodiesList[BODIES_COUNT_MAX];
-  int bodiesListCount = 0;
+  BodyCollection bodyCollection;
 
   // read file and create Body objects to store in bodiesList with the 
   // number of created objects in bodiesListCount
-  bool readResult = createBodiesFromFile(inputFileName, bodiesList, bodiesListCount);
+  bool readResult = bodyCollection.createBodiesFromFile(inputFileName);
   if (readResult == READ_BODIES_FAILED) { return 1; }
 
   // check to make sure there are at least 3 bodies, not more than 36
-  if (bodiesListCount < 3 || bodiesListCount > 36) {
+  if (bodyCollection.bodiesListCount < 3 || bodyCollection.bodiesListCount > 36) {
     cerr << "ERROR: input file must contain between 3 and 36 bodies." << endl;
     return 1;
   }
@@ -52,18 +48,18 @@ int main(int argc, char *argv[]) {
   Body* furthestBodies[2];
 
   // find closest bodies, store pointers to them in closestBodies:
-  getClosestBodies(bodiesList, bodiesListCount, closestBodies);
+  bodyCollection.getClosestBodies(closestBodies);
 
   // find furthest bodies, store pointers to them in furthestBodies:
-  getFurthestBodies(bodiesList, bodiesListCount, furthestBodies);
+  bodyCollection.getFurthestBodies(furthestBodies);
 
   cout << "closest " << closestBodies[0]->getLabel() << " " << closestBodies[1]->getLabel() << endl;
   cout << "furthest" << furthestBodies[0]->getLabel() << " " << furthestBodies[1]->getLabel() << endl;
 
-  double averageDistance = getAverageDistanceBetweenBodies(bodiesList, bodiesListCount);
+  double averageDistance = bodyCollection.getAverageDistanceBetweenBodies();
   cout << "average dist: " << averageDistance << endl;
 
-  double volumeOfBoundingBox = getVolumeOfBoxBoundingBodies(bodiesList, bodiesListCount);
+  double volumeOfBoundingBox = bodyCollection.getVolumeOfBoxBoundingBodies();
 
   cout << "bounding box: " << volumeOfBoundingBox << endl;
   return 0;
