@@ -15,81 +15,46 @@ double getDistanceBetweenBodies(Body body1, Body body2) {
   );
 };
 
-// TODO: consider using a Map that maps distance to [body1, body2]
-//        in order to only calcuate distances between bodies once
-//        for getClosestBodies, getFurthestBodies, and 
-//         getAverageDistanceBetweenBodies
-
-BodyPair BodyCollection::getClosestBodies() {
-  // start off by comparing the first and second Bodies
-  double shortestDistance = getDistanceBetweenBodies(bodiesList[0], bodiesList[1]);
-
-  // hold pointers to the current closest pair of bodies
-  Body *currentClosestPairBody1 = &bodiesList[0];
-  Body *currentClosestPairBody2 = &bodiesList[1];
-
-  // temporarily store distance calculated for each comparison here
-  double currentDistance;
-
-  // For i bodies in bodiesList, iterate through i - 1 bodies, calculating the 
-  // distances between each body and the bodies after it in the array.
+void BodyCollection::calculateDistances() {
   for (int i = 0; i < bodiesListCount - 1; i++) {
     for (int n = i + 1; n < bodiesListCount; n++) {
-      currentDistance = getDistanceBetweenBodies(bodiesList[i], bodiesList[n]);
+      BodyPair pair;
+      pair.distance = getDistanceBetweenBodies(bodiesList[i], bodiesList[n]);
+      pair.firstBody = &bodiesList[i];
+      pair.secondBody = &bodiesList[n];
 
-      // If the current pair's distance is shorter than any previous, set 
-      // shortestDistance to the current distance and note the current bodies in currentClosestPairBody1 and currentClosestPairBody2
-      if (currentDistance < shortestDistance) {
-        shortestDistance = currentDistance;
-        currentClosestPairBody1 = &bodiesList[i];
-        currentClosestPairBody2 = &bodiesList[n];
-      }
+      this->bodyPairsList[this->bodyPairsListCount] = pair;
+      this->bodyPairsListCount++;
+    }
+  }
+}
+
+BodyPair BodyCollection::getClosestBodies() {
+  double closestDistance = bodyPairsList[0].distance;
+  int indexOfClosestPair = 0;
+
+  for (int i = 1; i < bodyPairsListCount; i++) {
+    if (bodyPairsList[i].distance < closestDistance) {
+      closestDistance = bodyPairsList[i].distance;
+      indexOfClosestPair = i;
     }
   }
 
-  BodyPair result;
-  result.firstBody = currentClosestPairBody1;
-  result.secondBody = currentClosestPairBody2;
-  result.distance = shortestDistance;
-
-  return result;
+  return bodyPairsList[indexOfClosestPair];
 }
 
 BodyPair BodyCollection::getFurthestBodies() {
-  // start off by comparing the first and second Bodies
-  double furthestDistance = getDistanceBetweenBodies(bodiesList[0], bodiesList[1]);
-  
-  // hold pointers to the current furthest pair of bodies
-  Body *currentFurthestPairBody1 = &bodiesList[0];
-  Body *currentFurthestPairBody2 = &bodiesList[1];
+  double furthestDistance = bodyPairsList[0].distance;
+  int indexOfFurthestPair = 0;
 
-  // temporarily store distance calculated for each comparison here
-  double currentDistance;
-
-  // For i bodies in bodiesList, iterate through i - 1 bodies, calculating the 
-  // distances between each body and the bodies after it in the array.
-  for (int i = 0; i < bodiesListCount - 1; i++) {
-    for (int n = i + 1; n < bodiesListCount; n++) {
-      currentDistance = getDistanceBetweenBodies(bodiesList[i], bodiesList[n]);
-
-      // If the current pair's distance is shorter than any previous, set 
-      // furthestDistance to the current distance and note the current bodies in currentFurthestPairBody1 and currentFurthestPairBody2
-      if (currentDistance > furthestDistance) {
-        furthestDistance = currentDistance;
-        currentFurthestPairBody1 = &bodiesList[i];
-        currentFurthestPairBody2 = &bodiesList[n];
-      }
+  for (int i = 1; i < bodyPairsListCount; i++) {
+    if (bodyPairsList[i].distance > furthestDistance) {
+      furthestDistance = bodyPairsList[i].distance;
+      indexOfFurthestPair = i;
     }
   }
 
-  // place pointers to the Furthest bodies into the results pointer array
-
-  BodyPair result;
-  result.firstBody = currentFurthestPairBody1;
-  result.secondBody = currentFurthestPairBody2;
-  result.distance = furthestDistance;
-
-  return result;
+  return bodyPairsList[indexOfFurthestPair];
 }
 
 // void sortBodiesListByLabel(Body &bodiestList[], int bodiesListCount) {
@@ -126,16 +91,12 @@ double BodyCollection::getVolumeOfBoxBoundingBodies() {
 
 double BodyCollection::getAverageDistanceBetweenBodies() {
   double sum = 0;
-  int distancesCount = 0;
 
-  for (int i = 0; i < bodiesListCount - 1; i++) {
-    for (int n = i + 1; n < bodiesListCount; n++) {
-      sum += getDistanceBetweenBodies(bodiesList[i], bodiesList[n]);
-      distancesCount++;
-    }
+  for (int i = 0; i < bodyPairsListCount; i++) {
+    sum += bodyPairsList[i].distance;
   }
 
-  return sum / distancesCount;
+  return sum / bodyPairsListCount;
 }
 
 bool BodyCollection::createBodiesFromFile(std::string inputFileName) {

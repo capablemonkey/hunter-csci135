@@ -12,6 +12,7 @@ const bool READ_BODIES_SUCCESS = false;
 
 const int BODIES_COUNT_MAX = 36;
 const int BODIES_COUNT_MIN = 3;
+const int MAX_PAIRS = 666;			// (n^2 + n) / 2, where n = BODIES_COUNT_MAX - 1
 
 class Body {
   private:
@@ -35,10 +36,17 @@ struct BodyPair {
 class BodyCollection {
 	private:
 		Body bodiesList[BODIES_COUNT_MAX];
+		BodyPair bodyPairsList[MAX_PAIRS];
+		int bodyPairsListCount;
 	public:
 		int bodiesListCount;
-		BodyCollection() {};
+
+		BodyCollection() {
+			bodyPairsListCount = 0;
+		};
+
 		bool createBodiesFromFile(std::string inputFileName);
+		void calculateDistances();
 		BodyPair getClosestBodies();
 		BodyPair getFurthestBodies();
 		double getAverageDistanceBetweenBodies();

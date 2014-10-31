@@ -28,7 +28,6 @@ int main(int argc, char *argv[]) {
   string outputFileName1 = argv[2];
   string outputFileName2 = argv[3];
 
-  // store all bodies into this array:
   BodyCollection bodyCollection;
 
   // read file and create Body objects to store in bodiesList with the 
@@ -42,15 +41,11 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
-  // declare arrays of pointers to two closest + furthest Body objects, 
-  // which will be set later:
+  // calculate distances between bodies
+  bodyCollection.calculateDistances();
+
   BodyPair closestBodies = bodyCollection.getClosestBodies();
   BodyPair furthestBodies = bodyCollection.getFurthestBodies();
-
-  // find closest bodies, store pointers to them in closestBodies:
-
-  // find furthest bodies, store pointers to them in furthestBodies:
-  
 
   cout << "closest " << closestBodies.firstBody->getLabel() << " " << closestBodies.secondBody->getLabel() << endl;
   cout << "furthest" << furthestBodies.firstBody->getLabel() << " " << furthestBodies.secondBody->getLabel() << endl;
