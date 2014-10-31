@@ -88,6 +88,34 @@ void getFurthestBodies(Body bodiesList[], int bodiesListCount, Body* resultList[
   return;
 }
 
+double getVolumeOfBoxBoundingBodies(Body bodiesList[], int bodiesListCount) {
+  // keep track of lowest and highest X, Y, and Z values:
+  double lowestX, lowestY, lowestZ, highestX, highestY, highestZ;
+
+  // initialize them to the first Body's coordinates:
+  lowestX = bodiesList[0].getX();
+  highestX = bodiesList[0].getX();
+
+  lowestY = bodiesList[0].getY();
+  highestY = bodiesList[0].getY();
+
+  lowestZ = bodiesList[0].getZ();
+  highestZ = bodiesList[0].getZ();
+
+  for (int index = 1; index < bodiesListCount; index++) {
+    if (bodiesList[index].getX() < lowestX) { lowestX = bodiesList[index].getX(); }
+    if (bodiesList[index].getX() > highestX) { highestX = bodiesList[index].getX(); }
+
+    if (bodiesList[index].getY() < lowestY) { lowestY = bodiesList[index].getY(); }
+    if (bodiesList[index].getY() > highestY) { highestY = bodiesList[index].getY(); }
+
+    if (bodiesList[index].getZ() < lowestZ) { lowestZ = bodiesList[index].getZ(); }
+    if (bodiesList[index].getZ() > highestZ) { highestZ = bodiesList[index].getZ(); }
+  }
+
+  return (highestX - lowestX) * (highestY - lowestY) * (highestZ - lowestZ);
+}
+
 double getAverageDistanceBetweenBodies(Body bodiesList[], int bodiesListCount) {
   double sum = 0;
   int distancesCount = 0;

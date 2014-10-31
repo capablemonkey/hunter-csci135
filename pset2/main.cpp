@@ -46,9 +46,15 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
+  // declare arrays of pointers to two closest + furthest Body objects, 
+  // which will be set later:
   Body* closestBodies[2];
   Body* furthestBodies[2];
+
+  // find closest bodies, store pointers to them in closestBodies:
   getClosestBodies(bodiesList, bodiesListCount, closestBodies);
+
+  // find furthest bodies, store pointers to them in furthestBodies:
   getFurthestBodies(bodiesList, bodiesListCount, furthestBodies);
 
   cout << "closest " << closestBodies[0]->getLabel() << " " << closestBodies[1]->getLabel() << endl;
@@ -56,5 +62,9 @@ int main(int argc, char *argv[]) {
 
   double averageDistance = getAverageDistanceBetweenBodies(bodiesList, bodiesListCount);
   cout << "average dist: " << averageDistance << endl;
+
+  double volumeOfBoundingBox = getVolumeOfBoxBoundingBodies(bodiesList, bodiesListCount);
+
+  cout << "bounding box: " << volumeOfBoundingBox << endl;
   return 0;
 }

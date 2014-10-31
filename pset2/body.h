@@ -36,5 +36,6 @@ double getDistanceBetweenBodies(Body body1, Body body2);
 void getClosestBodies(Body bodiesList[], int bodiesListCount, Body* resultList[2]);
 void getFurthestBodies(Body bodiesList[], int bodiesListCount, Body* resultList[2]);
 double getAverageDistanceBetweenBodies(Body bodiestList[], int bodiesListCount);
+double getVolumeOfBoxBoundingBodies(Body bodiesList[], int bodiesListCount);
 
 #endif
