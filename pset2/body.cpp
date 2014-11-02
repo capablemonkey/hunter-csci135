@@ -1,11 +1,16 @@
 #include "body.h"
 
+// Constructor for Body class:
 Body::Body(std::string label, double x, double y, double z) {
   this->label = label;
   this->x = x;
   this->y = y;
   this->z = z;
 }
+
+/*
+ *  BodyCollection methods:
+ */
 
 void BodyCollection::calculateDistances() {
   for (int i = 0; i < bodiesListCount - 1; i++) {
@@ -98,6 +103,10 @@ void BodyCollection::findBodyPairsWithBody(std::string label, BodyPair *bodyPair
   }
 }
 
+/*
+ *   BodyCollection file input/output methods:
+ */
+
 bool BodyCollection::createBodiesFromFile(std::string inputFileName) {
   // read file, map lines to Body objects:
   std::ifstream inputFile;
@@ -122,8 +131,8 @@ bool BodyCollection::createBodiesFromFile(std::string inputFileName) {
 
     // exit if we ecountered an error while parsing
     if(successfullyParsedBodyData != true) {
-      std::cout  << "ERROR: encountered an error reading file: " 
-            << inputFileName << std::endl;
+      std::err  << "ERROR: encountered an error reading file: " 
+                << inputFileName << std::endl;
       return FILE_IO_FAILED;
     }
 
@@ -242,7 +251,9 @@ bool BodyCollection::outputListingsFile(std::string outputFileName) {
   return FILE_IO_SUCCESS;
 }
 
-// Helper functions:
+/*
+ *  Helper Functions
+ */
 
 double getDistanceBetweenBodies(Body body1, Body body2) {
   return std::sqrt(

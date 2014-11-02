@@ -28,10 +28,10 @@ int main(int argc, char *argv[]) {
   string outputFileName1 = argv[2];
   string outputFileName2 = argv[3];
 
+  // define a container which we'll store Body objects in...
   BodyCollection bodyCollection;
 
-  // read file and create Body objects to store in bodiesList with the 
-  // number of created objects in bodiesListCount
+  // read file and store Body objects in bodyCollection:
   bool readResult = bodyCollection.createBodiesFromFile(inputFileName);
   if (readResult == FILE_IO_FAILED) { return 1; }
 
@@ -44,9 +44,11 @@ int main(int argc, char *argv[]) {
   // calculate distances between bodies
   bodyCollection.calculateDistances();
 
+  // calulate general stats and write them out 
   bool outputResult1 = bodyCollection.outputStatsFile(outputFileName1);
   if (outputResult1 == FILE_IO_FAILED) { return 1; }
 
+  // write out listing of Body objects
   bool outputResult2 = bodyCollection.outputListingsFile(outputFileName2);
   if (outputResult2 == FILE_IO_FAILED) { return 1; }
 
