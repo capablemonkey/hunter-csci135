@@ -47,7 +47,7 @@ class Body {
  * 	pointed to by pointers firstBody and secondBody.  BodyPairs are created for
  * 	every possible pairing of Body objects in a BodyCollection, and allow us the
  *	convenience of mapping 2 Body objects to the distance between them, which
- *	many of the BodyCollection methods depend on.
+ *	is used by many of the BodyCollection methods.
  */
 
 struct BodyPair {
@@ -59,6 +59,11 @@ struct BodyPair {
 /*
  *	A BodyCollection contains Body objects.  It contains methods to read Body
  *  Body objects from files and calculate statistics for them.	
+ *
+ *	BodyCollection stores an array of all possible BodyPairs, which lets us 
+ * 	avoid having to recalculate the distances between each Body object in order 
+ *	to find the average distance, max distance, min distance, and when listing
+ *	bodies and their relative distances.
  */
 
 class BodyCollection {
@@ -66,11 +71,12 @@ class BodyCollection {
 		// store Body objects in an array:
 		Body bodiesList[BODIES_COUNT_MAX];
 
-		// store an array of all BodyPairs:
+		// store an array of all BodyPairs.
 		BodyPair bodyPairsList[MAX_PAIRS];
 
 		// keep count of how many BodyPairs exist:
 		int bodyPairsListCount;
+		
 	public:
 		// keep count of how many Body objects are contained in this BodyCollection
 		int bodiesListCount;
