@@ -110,7 +110,7 @@ void BodyCollection::findBodyPairsWithBody(std::string label, BodyPair *bodyPair
 bool BodyCollection::createBodiesFromFile(std::string inputFileName) {
   // read file, map lines to Body objects:
   std::ifstream inputFile;
-  inputFile.open(inputFileName, std::ios_base::in);
+  inputFile.open(inputFileName.c_str(), std::ios_base::in);
 
   if (inputFile.fail()) {
     std::cerr << "ERROR: Could not open file: " << inputFileName << std::endl;
@@ -149,7 +149,7 @@ bool BodyCollection::createBodiesFromFile(std::string inputFileName) {
 bool BodyCollection::outputStatsFile(std::string outputFileName) {
   // open file stream for writing
   std::ofstream outputFile;
-  outputFile.open(outputFileName, std::ios_base::out);
+  outputFile.open(outputFileName.c_str(), std::ios_base::out);
 
   // if we were unable to open file for writing, stop here and return
   // IO failure flag:
@@ -189,7 +189,7 @@ bool BodyCollection::outputStatsFile(std::string outputFileName) {
 bool BodyCollection::outputListingsFile(std::string outputFileName) {
   // open file stream for writing
   std::ofstream outputFile;
-  outputFile.open(outputFileName, std::ios_base::out);
+  outputFile.open(outputFileName.c_str(), std::ios_base::out);
 
   // if we were unable to open file for writing, stop here and return
   // IO failure flag:
