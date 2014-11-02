@@ -7,14 +7,6 @@ Body::Body(std::string label, double x, double y, double z) {
   this->z = z;
 }
 
-double getDistanceBetweenBodies(Body body1, Body body2) {
-  return std::sqrt(
-    std::pow(body2.getX() - body1.getX(), 2) +
-    std::pow(body2.getY() - body1.getY(), 2) +
-    std::pow(body2.getZ() - body1.getZ(), 2)
-  );
-};
-
 void BodyCollection::calculateDistances() {
   for (int i = 0; i < bodiesListCount - 1; i++) {
     for (int n = i + 1; n < bodiesListCount; n++) {
@@ -95,14 +87,25 @@ double BodyCollection::getAverageDistanceBetweenBodies() {
   return sum / bodyPairsListCount;
 }
 
+void BodyCollection::findBodyPairsWithBody(std::string label, BodyPair *bodyPairsWithBody[], int &bodyPairsWithBodyCount) {
+  for(int i = 0; i < bodyPairsListCount; i++) {
+    if (bodyPairsList[i].firstBody->getLabel() == label || 
+      bodyPairsList[i].secondBody->getLabel() == label) {
+
+      bodyPairsWithBody[bodyPairsWithBodyCount] = &bodyPairsList[i];
+      bodyPairsWithBodyCount++;
+    }
+  }
+}
+
 bool BodyCollection::createBodiesFromFile(std::string inputFileName) {
   // read file, map lines to Body objects:
   std::ifstream inputFile;
   inputFile.open(inputFileName, std::ios_base::in);
 
   if (inputFile.fail()) {
-    std::cout << "ERROR: Could not open file: " << inputFileName << std::endl;
-    return READ_BODIES_FAILED;
+    std::cerr << "ERROR: Could not open file: " << inputFileName << std::endl;
+    return FILE_IO_FAILED;
   }
 
   // use these variables to extract data from file
@@ -121,7 +124,7 @@ bool BodyCollection::createBodiesFromFile(std::string inputFileName) {
     if(successfullyParsedBodyData != true) {
       std::cout  << "ERROR: encountered an error reading file: " 
             << inputFileName << std::endl;
-      return READ_BODIES_FAILED;
+      return FILE_IO_FAILED;
     }
 
     // create new Body and add it to the BodyCollection
@@ -129,47 +132,84 @@ bool BodyCollection::createBodiesFromFile(std::string inputFileName) {
     this->bodiesListCount++;
   }
 
-  return READ_BODIES_SUCCESS;
-}
+  inputFile.close();
 
-void BodyCollection::findBodyPairsWithBody(std::string label, BodyPair *bodyPairsWithBody[], int &bodyPairsWithBodyCount) {
-  for(int i = 0; i < bodyPairsListCount; i++) {
-    if (bodyPairsList[i].firstBody->getLabel() == label || 
-      bodyPairsList[i].secondBody->getLabel() == label) {
-
-      bodyPairsWithBody[bodyPairsWithBodyCount] = &bodyPairsList[i];
-      bodyPairsWithBodyCount++;
-    }
-  }
+  return FILE_IO_SUCCESS;
 }
 
 bool BodyCollection::outputStatsFile(std::string outputFileName) {
+  // open file stream for writing
+  std::ofstream outputFile;
+  outputFile.open(outputFileName, std::ios_base::out);
+
+  // if we were unable to open file for writing, stop here and return
+  // IO failure flag:
+  if (outputFile.fail()) {
+    std::cerr << "ERROR: Could not open file for writing: " << outputFileName << std::endl;
+    return FILE_IO_FAILED;
+  }
+
+  // set precision for floating point number output:
+  outputFile.setf(std::ios::fixed);
+  outputFile.setf(std::ios::showpoint);
+  outputFile.precision(2);
+
+  // determine stats using BodyCollection methods and write them out
   BodyPair closestBodies = this->getClosestBodies();
   BodyPair furthestBodies = this->getFurthestBodies();
-
-  std::cout << "closest " << closestBodies.firstBody->getLabel() << " " << closestBodies.secondBody->getLabel() << std::endl;
-  std::cout << "furthest" << furthestBodies.firstBody->getLabel() << " " << furthestBodies.secondBody->getLabel() << std::endl;
-
   double averageDistance = this->getAverageDistanceBetweenBodies();
-  std::cout << "average dist: " << averageDistance << std::endl;
-
   double volumeOfBoundingBox = this->getVolumeOfBoxBoundingBodies();
 
-  std::cout << "bounding box: " << volumeOfBoundingBox << std::endl;
-  return true;
+  outputFile  << closestBodies.firstBody->getLabel() << " " 
+              << closestBodies.secondBody->getLabel() << " "
+              << closestBodies.distance << "km"
+              << std::endl;
+
+  outputFile  << furthestBodies.firstBody->getLabel() << " " 
+              << furthestBodies.secondBody->getLabel() << " " 
+              << furthestBodies.distance << "km"
+              << std::endl;
+
+  outputFile << averageDistance << "km" << std::endl;
+  outputFile << volumeOfBoundingBox << "km^3" << std::endl;
+
+  outputFile.close();
+  return FILE_IO_SUCCESS;
 }
 
 bool BodyCollection::outputListingsFile(std::string outputFileName) {
-  // sort bodies by label alphabetically
+  // open file stream for writing
+  std::ofstream outputFile;
+  outputFile.open(outputFileName, std::ios_base::out);
+
+  // if we were unable to open file for writing, stop here and return
+  // IO failure flag:
+  if (outputFile.fail()) {
+    std::cerr << "ERROR: Could not open file for writing: " << outputFileName << std::endl;
+    return FILE_IO_FAILED;
+  }
+
+  // set precision for floating point number output:
+  outputFile.setf(std::ios::fixed);
+  outputFile.setf(std::ios::showpoint);
+  outputFile.precision(2);
+
+  // get an array of the labels of the bodies in our BodyCollection:
   std::string labels[BODIES_COUNT_MAX];
 
   for (int i = 0; i < bodiesListCount; i++) {
     labels[i] = bodiesList[i].getLabel();
   }
 
+  // sort the labels alphabetically:
   sortStringsAlpha(labels, bodiesListCount);
 
+  /*
+   * For each label, retrieve the BodyPairs that contain the body with that 
+   * label.  Then, sort the BodyPairs by distance and output them.
+   */
   for (int i = 0; i < bodiesListCount; i++) {
+    // array of pointers to BodyPairs that contain body w/ current label
     BodyPair *bodyPairsWithBody[MAX_PAIRS];
     int bodyPairsWithBodyCount = 0;
 
@@ -179,31 +219,39 @@ bool BodyCollection::outputListingsFile(std::string outputFileName) {
     // sort the BodyPairs by distance:
     sortBodyPairsByDistance(bodyPairsWithBody, bodyPairsWithBodyCount);
     
+    // write new section:
+    outputFile << labels[i] << std::endl;
 
-    std::cout << " > " << labels[i] << std::endl;
+    // write the distance to the body itself, 0.  
+    // (not sure why this would be useful... just following the spec):
+    outputFile << "\t" << labels[i] << "\t" << "0.00" << std::endl;
 
     for (int n = 0; n < bodyPairsWithBodyCount; n++) {
-      // get the label of the "other" bodies:
+      // get the label of the companion body in each BodyPair
       std::string otherBodyLabel = (
         (*bodyPairsWithBody[n]).firstBody->getLabel() != labels[i])  
           ? (*bodyPairsWithBody[n]).firstBody->getLabel() 
           : (*bodyPairsWithBody[n]).secondBody->getLabel();
-          
-      std::cout << "\t" << otherBodyLabel
-        << " - " << (*bodyPairsWithBody[n]).distance
-        << std::endl;
+
+      outputFile  << "\t" << otherBodyLabel
+                  << "\t" << (*bodyPairsWithBody[n]).distance
+                  << std::endl;
     }
   }
 
-  // create BodyPairs or fetch all bodyPairs that have the same label
-
-  // sort those bodyPairs by distance and print them
-  return true;
+  outputFile.close();
+  return FILE_IO_SUCCESS;
 }
 
-
-
 // Helper functions:
+
+double getDistanceBetweenBodies(Body body1, Body body2) {
+  return std::sqrt(
+    std::pow(body2.getX() - body1.getX(), 2) +
+    std::pow(body2.getY() - body1.getY(), 2) +
+    std::pow(body2.getZ() - body1.getZ(), 2)
+  );
+};
 
 void sortBodyPairsByDistance(BodyPair *bodyPairs[], int &bodyPairsCount) {
   // Bubble sort

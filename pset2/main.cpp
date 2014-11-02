@@ -33,7 +33,7 @@ int main(int argc, char *argv[]) {
   // read file and create Body objects to store in bodiesList with the 
   // number of created objects in bodiesListCount
   bool readResult = bodyCollection.createBodiesFromFile(inputFileName);
-  if (readResult == READ_BODIES_FAILED) { return 1; }
+  if (readResult == FILE_IO_FAILED) { return 1; }
 
   // check to make sure there are at least 3 bodies, not more than 36
   if (bodyCollection.bodiesListCount < 3 || bodyCollection.bodiesListCount > 36) {
@@ -45,7 +45,10 @@ int main(int argc, char *argv[]) {
   bodyCollection.calculateDistances();
 
   bool outputResult1 = bodyCollection.outputStatsFile(outputFileName1);
+  if (outputResult1 == FILE_IO_FAILED) { return 1; }
+
   bool outputResult2 = bodyCollection.outputListingsFile(outputFileName2);
+  if (outputResult2 == FILE_IO_FAILED) { return 1; }
 
   return 0;
 }

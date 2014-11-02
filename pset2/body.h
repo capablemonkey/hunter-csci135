@@ -6,9 +6,10 @@
 #import <string>
 #import <fstream>
 #import <cmath>
+#import <iomanip>
 
-const bool READ_BODIES_FAILED = true;
-const bool READ_BODIES_SUCCESS = false;
+const bool FILE_IO_FAILED = true;
+const bool FILE_IO_SUCCESS = false;
 
 const int BODIES_COUNT_MAX = 36;
 const int BODIES_COUNT_MIN = 3;
@@ -54,6 +55,8 @@ class BodyCollection {
 		bool outputStatsFile(std::string outputFileName);
 		bool outputListingsFile(std::string outputFileName);
 };
+
+// Helper functions:
 
 double getDistanceBetweenBodies(Body body1, Body body2);
 
