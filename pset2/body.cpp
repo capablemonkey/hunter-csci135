@@ -131,8 +131,8 @@ bool BodyCollection::createBodiesFromFile(std::string inputFileName) {
 
     // exit if we ecountered an error while parsing
     if(successfullyParsedBodyData != true) {
-      std::err  << "ERROR: encountered an error reading file: " 
-                << inputFileName << std::endl;
+      std::cerr   << "ERROR: encountered an error reading file: " 
+                  << inputFileName << std::endl;
       return FILE_IO_FAILED;
     }
 
@@ -244,6 +244,11 @@ bool BodyCollection::outputListingsFile(std::string outputFileName) {
 
       outputFile  << "\t" << otherBodyLabel
                   << "\t" << (*bodyPairsWithBody[n]).distance;
+
+      // if this is not the last line of the file, print a new line:
+      if (!(n == bodyPairsWithBodyCount - 1 && i == bodiesListCount - 1)) { 
+        outputFile << std::endl; 
+      }
     }
   }
 
