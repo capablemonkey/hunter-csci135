@@ -6,10 +6,10 @@
  *  Import std lib headers
  */
 
-#import <iostream>    // std::cerr
-#import <string>      // std::string
-#import <fstream>     // std::ifstream, std::ofstream
-#import <cmath>       // std::pow, std::sqrt
+#include <iostream>    // std::cerr
+#include <string>      // std::string
+#include <fstream>     // std::ifstream, std::ofstream
+#include <cmath>       // std::pow, std::sqrt
 
 /*
  *  Constants

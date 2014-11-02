@@ -11,8 +11,8 @@ Build with:   g++ main.cpp body.cpp -o bodies
 Dependencies: none
 ******************************************************************************/
 
-#import <iostream>
-#import "body.h"    // BodyCollection, FILE_IO_FAILED defined here
+#include <iostream>
+#include "body.h"    // BodyCollection, FILE_IO_FAILED defined here
 
 using namespace std;
 
