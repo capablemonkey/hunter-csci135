@@ -12,7 +12,7 @@ Dependencies: none
 ******************************************************************************/
 
 #import <iostream>
-#import "body.h"
+#import "body.h"    // BodyCollection, FILE_IO_FAILED defined here
 
 using namespace std;
 
