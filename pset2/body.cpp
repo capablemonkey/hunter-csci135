@@ -273,24 +273,10 @@ void sortBodyPairsByDistance(BodyPair *bodyPairs[], int &bodyPairsCount) {
   for (int i = 0; i < bodyPairsCount - 1; i++) {
     for (int n = 0; n < bodyPairsCount - 1; n++) {
       if ( (*bodyPairs[n]).distance > (*bodyPairs[n + 1]).distance) {
-        swapBodyPairs(bodyPairs, n, n + 1);
+        std::swap(bodyPairs[n], bodyPairs[n + 1]);
       }
     }
   }
-}
-
-void swapBodyPairs(BodyPair *bodyPairs[], int indexA, int indexB) {
-  BodyPair *temp = bodyPairs[indexA];
-
-  bodyPairs[indexA] = bodyPairs[indexB];
-  bodyPairs[indexB] = temp;
-}
-
-void swapStrings(std::string strings[], int indexA, int indexB) {
-  std::string temp = strings[indexA];
-
-  strings[indexA] = strings[indexB];
-  strings[indexB] = temp;
 }
 
 void sortStringsAlpha(std::string strings[], int stringsCount) {
@@ -299,7 +285,7 @@ void sortStringsAlpha(std::string strings[], int stringsCount) {
   for (int i = 0; i < stringsCount - 1; i++) {
     for (int n = 0; n < stringsCount - 1; n++) {
       if (strings[n] > strings[n + 1]) {
-        swapStrings(strings, n, n + 1);
+        std::swap(strings[n], strings[n + 1]);
       }
     }
   }

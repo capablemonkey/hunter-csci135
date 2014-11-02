@@ -10,6 +10,7 @@
 #include <string>      // std::string
 #include <fstream>     // std::ifstream, std::ofstream
 #include <cmath>       // std::pow, std::sqrt
+#include <algorithm>   // std::swap
 
 /*
  *  Constants
@@ -143,14 +144,6 @@ double getDistanceBetweenBodies(Body body1, Body body2);
 // Given an array of pointers to BodyPair objects, sort the array by the 
 // distance of each BodyPair 
 void sortBodyPairsByDistance(BodyPair *bodyPairs[], int &bodyPairsCount);
-
-// Given an array of BodyPair pointers, swap the pointer at indexA withe the
-// pointer at indexB
-void swapBodyPairs(BodyPair *bodyPairs[], int indexA, int indexB);
-
-// Given an array of Strings, swap the string at indexA with the string at 
-// indexB
-void swapStrings(std::string strings[], int indexA, int indexB);
 
 // Given an array of Strings, sort the array alphabetically.
 void sortStringsAlpha(std::string strings[], int stringsCount);
