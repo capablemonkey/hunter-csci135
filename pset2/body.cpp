@@ -171,7 +171,7 @@ bool BodyCollection::outputStatsFile(std::string outputFileName) {
               << std::endl;
 
   outputFile << averageDistance << "km" << std::endl;
-  outputFile << volumeOfBoundingBox << "km^3" << std::endl;
+  outputFile << volumeOfBoundingBox << "km^3";
 
   outputFile.close();
   return FILE_IO_SUCCESS;
@@ -234,8 +234,7 @@ bool BodyCollection::outputListingsFile(std::string outputFileName) {
           : (*bodyPairsWithBody[n]).secondBody->getLabel();
 
       outputFile  << "\t" << otherBodyLabel
-                  << "\t" << (*bodyPairsWithBody[n]).distance
-                  << std::endl;
+                  << "\t" << (*bodyPairsWithBody[n]).distance;
     }
   }
 
