@@ -11,6 +11,7 @@
 #include <fstream>     // std::ifstream, std::ofstream
 #include <cmath>       // std::pow, std::sqrt
 #include <algorithm>   // std::swap
+#include <array>       // std::array
 
 /*
  *  Constants
@@ -70,10 +71,10 @@ struct BodyPair {
 class BodyCollection {
   private:
     // store Body objects in an array:
-    Body bodiesList[BODIES_COUNT_MAX];
+    std::array<Body, BODIES_COUNT_MAX> bodiesList;
 
     // store an array of all BodyPairs.
-    BodyPair bodyPairsList[MAX_PAIRS];
+    std::array<BodyPair, MAX_PAIRS> bodyPairsList;
 
     // keep count of how many BodyPairs exist:
     int bodyPairsListCount;

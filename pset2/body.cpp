@@ -26,32 +26,16 @@ void BodyCollection::calculateDistances() {
   }
 }
 
+bool compareBodyPairs(BodyPair a, BodyPair b) {
+  return a.distance < b.distance;
+}
+
 BodyPair BodyCollection::getClosestBodies() {
-  double closestDistance = bodyPairsList[0].distance;
-  int indexOfClosestPair = 0;
-
-  for (int i = 1; i < bodyPairsListCount; i++) {
-    if (bodyPairsList[i].distance < closestDistance) {
-      closestDistance = bodyPairsList[i].distance;
-      indexOfClosestPair = i;
-    }
-  }
-
-  return bodyPairsList[indexOfClosestPair];
+  return *std::min_element(bodyPairsList.begin(), bodyPairsList.begin() + bodyPairsListCount, compareBodyPairs);
 }
 
 BodyPair BodyCollection::getFurthestBodies() {
-  double furthestDistance = bodyPairsList[0].distance;
-  int indexOfFurthestPair = 0;
-
-  for (int i = 1; i < bodyPairsListCount; i++) {
-    if (bodyPairsList[i].distance > furthestDistance) {
-      furthestDistance = bodyPairsList[i].distance;
-      indexOfFurthestPair = i;
-    }
-  }
-
-  return bodyPairsList[indexOfFurthestPair];
+  return *std::max_element(bodyPairsList.begin(), bodyPairsList.begin() + bodyPairsListCount, compareBodyPairs);
 }
 
 double BodyCollection::getVolumeOfBoxBoundingBodies() {
