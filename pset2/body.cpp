@@ -26,16 +26,16 @@ void BodyCollection::calculateDistances() {
   }
 }
 
-bool compareBodyPairs(BodyPair a, BodyPair b) {
+bool compareBodyPairsByDistance(BodyPair a, BodyPair b) {
   return a.distance < b.distance;
 }
 
 BodyPair BodyCollection::getClosestBodies() {
-  return *std::min_element(bodyPairsList.begin(), bodyPairsList.begin() + bodyPairsListCount, compareBodyPairs);
+  return *std::min_element(bodyPairsList.begin(), bodyPairsList.begin() + bodyPairsListCount, compareBodyPairsByDistance);
 }
 
 BodyPair BodyCollection::getFurthestBodies() {
-  return *std::max_element(bodyPairsList.begin(), bodyPairsList.begin() + bodyPairsListCount, compareBodyPairs);
+  return *std::max_element(bodyPairsList.begin(), bodyPairsList.begin() + bodyPairsListCount, compareBodyPairsByDistance);
 }
 
 double BodyCollection::getVolumeOfBoxBoundingBodies() {

@@ -139,6 +139,10 @@ class BodyCollection {
  *  Helper Functions:
  */
 
+// Given 2 BodyPairs, a and b, return true if a's distance is greater than b's.  This is used 
+// as a compare function by getClosestBodies and getFurthestBodies.
+bool compareBodyPairsByDistance(BodyPair a, BodyPair b);
+
 // Given 2 Body objects, calculate the distance between them and return it
 double getDistanceBetweenBodies(Body body1, Body body2);
 
