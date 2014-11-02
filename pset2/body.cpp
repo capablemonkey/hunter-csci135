@@ -26,16 +26,14 @@ void BodyCollection::calculateDistances() {
   }
 }
 
-bool compareBodyPairsByDistance(BodyPair a, BodyPair b) {
-  return a.distance < b.distance;
-}
-
 BodyPair BodyCollection::getClosestBodies() {
-  return *std::min_element(bodyPairsList.begin(), bodyPairsList.begin() + bodyPairsListCount, compareBodyPairsByDistance);
+  return *std::min_element(bodyPairsList.begin(), 
+    bodyPairsList.begin() + bodyPairsListCount, compareBodyPairsByDistance);
 }
 
 BodyPair BodyCollection::getFurthestBodies() {
-  return *std::max_element(bodyPairsList.begin(), bodyPairsList.begin() + bodyPairsListCount, compareBodyPairsByDistance);
+  return *std::max_element(bodyPairsList.begin(), 
+    bodyPairsList.begin() + bodyPairsListCount, compareBodyPairsByDistance);
 }
 
 double BodyCollection::getVolumeOfBoxBoundingBodies() {
@@ -76,7 +74,10 @@ double BodyCollection::getAverageDistanceBetweenBodies() {
   return sum / bodyPairsListCount;
 }
 
-void BodyCollection::findBodyPairsWithBody(std::string label, BodyPair *bodyPairsWithBody[], int &bodyPairsWithBodyCount) {
+void BodyCollection::findBodyPairsWithBody(std::string label, 
+                                           BodyPair *bodyPairsWithBody[], 
+                                           int &bodyPairsWithBodyCount) {
+
   for(int i = 0; i < bodyPairsListCount; i++) {
     if (bodyPairsList[i].firstBody->getLabel() == label || 
       bodyPairsList[i].secondBody->getLabel() == label) {
@@ -138,7 +139,8 @@ bool BodyCollection::outputStatsFile(std::string outputFileName) {
   // if we were unable to open file for writing, stop here and return
   // IO failure flag:
   if (outputFile.fail()) {
-    std::cerr << "ERROR: Could not open file for writing: " << outputFileName << std::endl;
+    std::cerr   << "ERROR: Could not open file for writing: " 
+                << outputFileName << std::endl;
     return FILE_IO_FAILED;
   }
 
@@ -178,7 +180,8 @@ bool BodyCollection::outputListingsFile(std::string outputFileName) {
   // if we were unable to open file for writing, stop here and return
   // IO failure flag:
   if (outputFile.fail()) {
-    std::cerr << "ERROR: Could not open file for writing: " << outputFileName << std::endl;
+    std::cerr   << "ERROR: Could not open file for writing: " 
+                << outputFileName << std::endl;
     return FILE_IO_FAILED;
   }
 
@@ -207,7 +210,8 @@ bool BodyCollection::outputListingsFile(std::string outputFileName) {
     int bodyPairsWithBodyCount = 0;
 
     // find all BodyPairs that include the body with the current label
-    this->findBodyPairsWithBody(labels[i], bodyPairsWithBody, bodyPairsWithBodyCount);
+    this->findBodyPairsWithBody(labels[i], bodyPairsWithBody, 
+                                bodyPairsWithBodyCount);
     
     // sort the BodyPairs by distance:
     sortBodyPairsByDistance(bodyPairsWithBody, bodyPairsWithBodyCount);
@@ -243,6 +247,11 @@ bool BodyCollection::outputListingsFile(std::string outputFileName) {
 /*
  *  Helper Functions
  */
+
+
+bool compareBodyPairsByDistance(BodyPair a, BodyPair b) {
+  return a.distance < b.distance;
+}
 
 double getDistanceBetweenBodies(Body body1, Body body2) {
   return std::sqrt(
