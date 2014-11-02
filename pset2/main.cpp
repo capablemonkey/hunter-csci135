@@ -36,7 +36,8 @@ int main(int argc, char *argv[]) {
   if (readResult == FILE_IO_FAILED) { return 1; }
 
   // check to make sure there are at least 3 bodies, not more than 36
-  if (bodyCollection.bodiesListCount < 3 || bodyCollection.bodiesListCount > 36) {
+  if (bodyCollection.bodiesListCount < 3 || 
+      bodyCollection.bodiesListCount > 36) {
     cerr << "ERROR: input file must contain between 3 and 36 bodies." << endl;
     return 1;
   }

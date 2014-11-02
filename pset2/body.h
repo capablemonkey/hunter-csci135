@@ -124,7 +124,9 @@ class BodyCollection {
     // the body with that label.  Store pointers to the results in the 
     // provided array bodyPairsContainingBody[].  Keep count of how many results
     // there were in bodyPairsContainingBodyCount:
-    void findBodyPairsWithBody(std::string label, BodyPair *bodyPairsContainingBody[], int &bodyPairsContainingBodyCount);
+    void findBodyPairsWithBody(std::string label, 
+                               BodyPair *bodyPairsContainingBody[], 
+                               int &bodyPairsContainingBodyCount);
 
     // Write out stats file.  Return FILE_IO_SUCCESS if able to open file and
     // write successfully, otherwise FILE_IO_FAILED.
@@ -139,8 +141,8 @@ class BodyCollection {
  *  Helper Functions:
  */
 
-// Given 2 BodyPairs, a and b, return true if a's distance is greater than b's.  This is used 
-// as a compare function by getClosestBodies and getFurthestBodies.
+// Given 2 BodyPairs, a and b, return true if a's distance is greater than b's.   
+// This is used as a compare function by getClosestBodies and getFurthestBodies.
 bool compareBodyPairsByDistance(BodyPair a, BodyPair b);
 
 // Given 2 Body objects, calculate the distance between them and return it
