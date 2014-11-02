@@ -41,9 +41,7 @@ class BodyCollection {
 	public:
 		int bodiesListCount;
 
-		BodyCollection() {
-			bodyPairsListCount = 0;
-		};
+		BodyCollection() { bodyPairsListCount = 0; };
 
 		bool createBodiesFromFile(std::string inputFileName);
 		void calculateDistances();
@@ -51,8 +49,18 @@ class BodyCollection {
 		BodyPair getFurthestBodies();
 		double getAverageDistanceBetweenBodies();
 		double getVolumeOfBoxBoundingBodies();
+		void findBodyPairsWithBody(std::string label, BodyPair *bodyPairsContainingBody[], int &bodyPairsContainingBodyCount);
+
+		bool outputStatsFile(std::string outputFileName);
+		bool outputListingsFile(std::string outputFileName);
 };
 
 double getDistanceBetweenBodies(Body body1, Body body2);
+
+void sortBodyPairsByDistance(BodyPair *bodyPairs[], int &bodyPairsCount);
+void swapBodyPairs(BodyPair *bodyPairs[], int indexA, int indexB);
+
+void swapStrings(std::string strings[], int indexA, int indexB);
+void sortStringsAlpha(std::string strings[], int stringsCount);
 
 #endif

@@ -44,17 +44,8 @@ int main(int argc, char *argv[]) {
   // calculate distances between bodies
   bodyCollection.calculateDistances();
 
-  BodyPair closestBodies = bodyCollection.getClosestBodies();
-  BodyPair furthestBodies = bodyCollection.getFurthestBodies();
+  bool outputResult1 = bodyCollection.outputStatsFile(outputFileName1);
+  bool outputResult2 = bodyCollection.outputListingsFile(outputFileName2);
 
-  cout << "closest " << closestBodies.firstBody->getLabel() << " " << closestBodies.secondBody->getLabel() << endl;
-  cout << "furthest" << furthestBodies.firstBody->getLabel() << " " << furthestBodies.secondBody->getLabel() << endl;
-
-  double averageDistance = bodyCollection.getAverageDistanceBetweenBodies();
-  cout << "average dist: " << averageDistance << endl;
-
-  double volumeOfBoundingBox = bodyCollection.getVolumeOfBoxBoundingBodies();
-
-  cout << "bounding box: " << volumeOfBoundingBox << endl;
   return 0;
 }

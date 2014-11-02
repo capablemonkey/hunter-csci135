@@ -57,10 +57,6 @@ BodyPair BodyCollection::getFurthestBodies() {
   return bodyPairsList[indexOfFurthestPair];
 }
 
-// void sortBodiesListByLabel(Body &bodiestList[], int bodiesListCount) {
-
-// }
-
 double BodyCollection::getVolumeOfBoxBoundingBodies() {
   // keep track of lowest and highest X, Y, and Z values:
   double lowestX, lowestY, lowestZ, highestX, highestY, highestZ;
@@ -134,4 +130,114 @@ bool BodyCollection::createBodiesFromFile(std::string inputFileName) {
   }
 
   return READ_BODIES_SUCCESS;
+}
+
+void BodyCollection::findBodyPairsWithBody(std::string label, BodyPair *bodyPairsWithBody[], int &bodyPairsWithBodyCount) {
+  for(int i = 0; i < bodyPairsListCount; i++) {
+    if (bodyPairsList[i].firstBody->getLabel() == label || 
+      bodyPairsList[i].secondBody->getLabel() == label) {
+
+      bodyPairsWithBody[bodyPairsWithBodyCount] = &bodyPairsList[i];
+      bodyPairsWithBodyCount++;
+    }
+  }
+}
+
+bool BodyCollection::outputStatsFile(std::string outputFileName) {
+  BodyPair closestBodies = this->getClosestBodies();
+  BodyPair furthestBodies = this->getFurthestBodies();
+
+  std::cout << "closest " << closestBodies.firstBody->getLabel() << " " << closestBodies.secondBody->getLabel() << std::endl;
+  std::cout << "furthest" << furthestBodies.firstBody->getLabel() << " " << furthestBodies.secondBody->getLabel() << std::endl;
+
+  double averageDistance = this->getAverageDistanceBetweenBodies();
+  std::cout << "average dist: " << averageDistance << std::endl;
+
+  double volumeOfBoundingBox = this->getVolumeOfBoxBoundingBodies();
+
+  std::cout << "bounding box: " << volumeOfBoundingBox << std::endl;
+  return true;
+}
+
+bool BodyCollection::outputListingsFile(std::string outputFileName) {
+  // sort bodies by label alphabetically
+  std::string labels[BODIES_COUNT_MAX];
+
+  for (int i = 0; i < bodiesListCount; i++) {
+    labels[i] = bodiesList[i].getLabel();
+  }
+
+  sortStringsAlpha(labels, bodiesListCount);
+
+  for (int i = 0; i < bodiesListCount; i++) {
+    BodyPair *bodyPairsWithBody[MAX_PAIRS];
+    int bodyPairsWithBodyCount = 0;
+
+    // find all BodyPairs that include the body with the current label
+    this->findBodyPairsWithBody(labels[i], bodyPairsWithBody, bodyPairsWithBodyCount);
+    
+    // sort the BodyPairs by distance:
+    sortBodyPairsByDistance(bodyPairsWithBody, bodyPairsWithBodyCount);
+    
+
+    std::cout << " > " << labels[i] << std::endl;
+
+    for (int n = 0; n < bodyPairsWithBodyCount; n++) {
+      // get the label of the "other" bodies:
+      std::string otherBodyLabel = (
+        (*bodyPairsWithBody[n]).firstBody->getLabel() != labels[i])  
+          ? (*bodyPairsWithBody[n]).firstBody->getLabel() 
+          : (*bodyPairsWithBody[n]).secondBody->getLabel();
+          
+      std::cout << "\t" << otherBodyLabel
+        << " - " << (*bodyPairsWithBody[n]).distance
+        << std::endl;
+    }
+  }
+
+  // create BodyPairs or fetch all bodyPairs that have the same label
+
+  // sort those bodyPairs by distance and print them
+  return true;
+}
+
+
+
+// Helper functions:
+
+void sortBodyPairsByDistance(BodyPair *bodyPairs[], int &bodyPairsCount) {
+  // Bubble sort
+  for (int i = 0; i < bodyPairsCount - 1; i++) {
+    for (int n = 0; n < bodyPairsCount - 1; n++) {
+      if ( (*bodyPairs[n]).distance > (*bodyPairs[n + 1]).distance) {
+        swapBodyPairs(bodyPairs, n, n + 1);
+      }
+    }
+  }
+}
+
+void swapBodyPairs(BodyPair *bodyPairs[], int indexA, int indexB) {
+  BodyPair *temp = bodyPairs[indexA];
+
+  bodyPairs[indexA] = bodyPairs[indexB];
+  bodyPairs[indexB] = temp;
+}
+
+void swapStrings(std::string strings[], int indexA, int indexB) {
+  std::string temp = strings[indexA];
+
+  strings[indexA] = strings[indexB];
+  strings[indexB] = temp;
+}
+
+void sortStringsAlpha(std::string strings[], int stringsCount) {
+  // Bubble sort
+
+  for (int i = 0; i < stringsCount - 1; i++) {
+    for (int n = 0; n < stringsCount - 1; n++) {
+      if (strings[n] > strings[n + 1]) {
+        swapStrings(strings, n, n + 1);
+      }
+    }
+  }
 }
