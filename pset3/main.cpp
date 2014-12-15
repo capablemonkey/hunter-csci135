@@ -75,8 +75,8 @@ std::string translateToProteinSequence() {
 };
 
 Sequence::Sequence(std::string description, std::string bases) {
-	this->description = description;
-	this->basesDirect = bases;
+  this->description = description;
+  this->basesDirect = bases;
   this->basesReverse = reverseStrand(bases);
 }
 
@@ -141,7 +141,7 @@ void Sequence::findORFsInFrame(int frame, bool reverse) {
 }
 
 Sequence createSequenceFromFile(std::string inputFileName) {
-	std::ifstream inputFile;
+  std::ifstream inputFile;
   inputFile.open(inputFileName.c_str(), std::ios_base::in);
 
   if (inputFile.fail()) {
@@ -180,17 +180,17 @@ Sequence createSequenceFromFile(std::string inputFileName) {
 }
 
 int main(int argc, char *argv[]) {
-	if (argc < 3) {
-		std::cerr << "Usage: dna <inputFile> <outputFile>" << std::endl;
-		return 1;
-	}
+  if (argc < 3) {
+    std::cerr << "Usage: dna <inputFile> <outputFile>" << std::endl;
+    return 1;
+  }
 
-	std::string inputFileName = argv[1];
-	std::string outputFileName = argv[2];
+  std::string inputFileName = argv[1];
+  std::string outputFileName = argv[2];
 
-	Sequence sequence = createSequenceFromFile(inputFileName);
+  Sequence sequence = createSequenceFromFile(inputFileName);
 
-	sequence.findOpenReadingFrames();
+  sequence.findOpenReadingFrames();
 
   return 0;
 }
