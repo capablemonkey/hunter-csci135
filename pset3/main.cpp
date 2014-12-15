@@ -4,7 +4,7 @@ Author: Gordon Zheng
 Created on: 2014-12-09
 Description:  TODO: fill this in
 Usage: ./dna <inputFile> <outputFile>
-Build with:   g++ main.cpp -o dna
+Build with: g++ main.cpp sequence.cpp openReadingFrame.cpp -o dna
 Dependencies: none
 ******************************************************************************/
 
