@@ -4,9 +4,11 @@ Author: Gordon Zheng
 Created on: 2014-12-09
 Description:  TODO: fill this in
 Usage: ./dna <inputFile> <outputFile>
-Build with: g++ main.cpp sequence.cpp openReadingFrame.cpp -o dna
+Build with: g++ -std=c++11 main.cpp sequence.cpp openReadingFrame.cpp -o dna
 Dependencies: none
 ******************************************************************************/
+
+// TODO: write makefile
 
 #include <iostream>
 #include <fstream>
@@ -66,6 +68,8 @@ int main(int argc, char *argv[]) {
   Sequence sequence = createSequenceFromFile(inputFileName);
 
   sequence.findOpenReadingFrames();
+
+  sequence.writeReportToStream(std::cout);
 
   return 0;
 }
