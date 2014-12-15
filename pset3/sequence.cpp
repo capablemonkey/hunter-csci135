@@ -1,52 +1,88 @@
 #include "sequence.h"
 
-Sequence::Sequence(std::string description, std::string bases) {
-  this->description = description;
-  this->basesDirect = bases;
-  this->basesReverse = reverseStrand(bases);
+// default constructor
+Sequence::Sequence() {
+  return;
 }
 
 void Sequence::findOpenReadingFrames() {
-  // TODO: do this for the reverse strand:
   for (int i = 0; i < 3; i++) {
+    // find ORFs for the direct strand.  (reverse=false)
     this->findORFsInFrame(i, false);
+
+    // find ORFs for the reverse strand.  (reverse = true)
     this->findORFsInFrame(i, true);
   }
 }
 
+// load a Sequence from a given stream
+void Sequence::loadFromStream(std::istream &in) {
+  // use these variables to extract data from stream
+  std::string description;
+  std::string buffer;
+  std::string bases;
+
+  // first line is a description
+  std::getline(in, description);
+
+  // get rid of ">" as first char in description:
+  description = description.substr(1, description.size());
+
+  while (in) {
+    // stop parsing if we've reached the end of the file
+    if (in.eof()) { break; }
+
+    in >> buffer;
+    bases += buffer;
+
+    // TODO: fix bug where a trailing empty line will cause a duplication of the last buffer
+  }
+
+  // normalize the case of the bases; convert to upper
+  bases = stringToUpper(bases);
+
+  this->description = description;
+  this->basesDirect = bases;
+  this->basesReverse = reverseStrand(bases);
+
+  return;
+}
+
 void Sequence::writeReportToStream(std::ostream &out) {
-	out << "ORF results for \"" << this->description 
-			<< "\" containing " << this->basesDirect.length()
-			<< " bases" << std::endl << std::endl;
+  out << "ORF results for \"" << this->description 
+      << "\" containing " << this->basesDirect.length()
+      << " bases" << std::endl << std::endl;
 
-	// iterate through ORFs, report on each frame for direct and reverse:
-	std::vector<OpenReadingFrame>::iterator it;
+  // iterate through ORFs, report on each frame for direct and reverse:
+  std::vector<OpenReadingFrame>::iterator it;
 
-	for (int i=0; i < 3; i++) {
-		if (this->openReadingFramesDirect[i].size() > 0) {
-			for (it = this->openReadingFramesDirect[i].begin(); it != this->openReadingFramesDirect[i].end(); it++) {
-				(*it).writeReport(out);
-			}
-		}
-		else {
-			out << "No ORFs were found in reading frame " << i + 1 << " on the direct strand" << std::endl << std::endl;
-		}
-	}
+  // direct:
+  for (int i=0; i < 3; i++) {
+    if (this->openReadingFramesDirect[i].size() > 0) {
+      for (it = this->openReadingFramesDirect[i].begin(); it != this->openReadingFramesDirect[i].end(); it++) {
+        (*it).writeReport(out);
+      }
+    }
+    else {
+      out << "No ORFs were found in reading frame " << i + 1 << " on the direct strand" << std::endl << std::endl;
+    }
+  }
 
-	for (int i=0; i < 3; i++) {
-		if (this->openReadingFramesReverse[i].size() > 0) {
-			for (it = this->openReadingFramesReverse[i].begin(); it != this->openReadingFramesReverse[i].end(); it++) {
-				(*it).writeReport(out);
-			}
-		}
-		else {
-			out << "No ORFs were found in reading frame " << i + 1 << " on the reverse strand" << std::endl << std::endl;
-		}
-	}
+  // reverse:
+  for (int i=0; i < 3; i++) {
+    if (this->openReadingFramesReverse[i].size() > 0) {
+      for (it = this->openReadingFramesReverse[i].begin(); it != this->openReadingFramesReverse[i].end(); it++) {
+        (*it).writeReport(out);
+      }
+    }
+    else {
+      out << "No ORFs were found in reading frame " << i + 1 << " on the reverse strand" << std::endl << std::endl;
+    }
+  }
 }
 
 void Sequence::findORFsInFrame(int frame, bool reverse) {
-  bool withinFrame = false;   // true: we found a START and are currently looking for the END
+  bool withinFrame = false;   // true if we found a START and are currently looking for the END
   int frameBeginIndex;        // position where we found the START codon
   std::string currentCodon;   // buffer to store the current codon / substring of 3 continuous bases
   int numberOfORFsFound = 0;
@@ -86,6 +122,12 @@ void Sequence::findORFsInFrame(int frame, bool reverse) {
 }
 
 // Helper functions:
+
+std::string stringToUpper(std::string strToConvert)
+{
+  std::transform(strToConvert.begin(), strToConvert.end(), strToConvert.begin(), ::toupper);
+  return strToConvert;
+}
 
 std::string reverseStrand(std::string strandBases) {
   std::string reverse = strandBases;
