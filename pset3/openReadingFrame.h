@@ -2,8 +2,9 @@
 #define OPEN_READING_FRAME_H
 
 #include <string>
-#include <iostream>  // TODO: remove this, only for debugging
+#include <iostream>  	// TODO: remove this, only for debugging
 #include <map>
+#include <algorithm>	// std::replace()
 
 class OpenReadingFrame {
 	private:

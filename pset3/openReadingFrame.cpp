@@ -1,7 +1,70 @@
 #include "OpenReadingFrame.h"
 
 std::map<std::string, std::string> MRNA_CODON_TO_PROTEIN = {
-	{"FOO", "BAR"}
+	{"UUU", "F"},
+	{"UUC", "F"},
+	{"UUA", "L"},
+	{"UUG", "L"},
+	{"CUU", "L"},
+	{"CUC", "L"},
+	{"CUA", "L"},
+	{"CUG", "L"},
+	{"AUU", "I"},
+	{"AUC", "I"},
+	{"AUA", "I"},
+	{"AUG", "M"},
+	{"GUU", "V"},
+	{"GUC", "V"},
+	{"GUA", "V"},
+	{"GUG", "V"},
+	{"UCU", "S"},
+	{"UCC", "S"},
+	{"UCA", "S"},
+	{"AGU", "S"},
+	{"AGC", "S"},
+	{"UCG", "S"},
+	{"CCU", "P"},
+	{"CCC", "P"},
+	{"CCA", "P"},
+	{"CCG", "P"},
+	{"ACU", "T"},
+	{"ACC", "T"},
+	{"ACA", "T"},
+	{"ACG", "T"},
+	{"GCU", "A"},
+	{"GCC", "A"},
+	{"GCA", "A"},
+	{"GCG", "A"},
+	{"UAU", "Y"},
+	{"UAC", "Y"},
+	{"UAA", "*"},
+	{"UGA", "*"},
+	{"UAG", "*"},
+	{"CAU", "H"},
+	{"CAC", "H"},
+	{"CAA", "Q"},
+	{"CAG", "Q"},
+	{"AAU", "N"},
+	{"AAC", "N"},
+	{"AAA", "K"},
+	{"AAG", "K"},
+	{"GAU", "D"},
+	{"GAC", "D"},
+	{"GAA", "E"},
+	{"GAG", "E"},
+	{"UGU", "C"},
+	{"UGC", "C"},
+	{"UGG", "W"},
+	{"CGU", "R"},
+	{"CGC", "R"},
+	{"CGA", "R"},
+	{"AGA", "R"},
+	{"AGG", "R"},
+	{"CGG", "R"},
+	{"GGU", "G"},
+	{"GGC", "G"},
+	{"GGA", "G"},
+	{"GGG", "G"}
 };
 
 OpenReadingFrame::OpenReadingFrame(std::string bases, std::string direction, int beginBaseIndex, int endBaseIndex, int readingFrame, int numberInReadingFrame) {
@@ -14,20 +77,33 @@ OpenReadingFrame::OpenReadingFrame(std::string bases, std::string direction, int
 }
 
 void OpenReadingFrame::writeReport(std::ostream &out) {
-	out << direction
-  << " " << beginBaseIndex + 1
-  << "-" << endBaseIndex + 1
-  << " RF[" << readingFrame + 1
-  << "] #" << numberInReadingFrame 
-  << " " << bases << std::endl;
+  out << ">ORF number " << numberInReadingFrame 
+  		<< " in reading frame " << readingFrame + 1
+  		<< " on the " << direction
+  		<<" strand extends from base " << beginBaseIndex + 1
+  		<< " to base " << endBaseIndex + 1
+  		<< std::endl;
 
-  out << this->translateToProteinSequence();
+ 	out << bases << std::endl << std::endl;
+ 	out << ">Translation of ORF number " << numberInReadingFrame
+ 			<< " in reading frame " << readingFrame + 1
+ 			<< " on the " << direction
+ 			<< " strand" << std::endl;
+
+  out << this->translateToProteinSequence() << std::endl << std::endl;
 }
 
 std::string OpenReadingFrame::translateToProteinSequence() {
-
 	// translate DNA to mRNA: replace all 'T' bases with 'U'
+	std::string mRNA = this->bases;
+	std::replace(mRNA.begin(), mRNA.end(), 'T', 'U');
 
-	std::cout << MRNA_CODON_TO_PROTEIN["FOO"];
-  return "foo";
+	// map codons to proteins:
+	std::string protein;
+
+	for (int i = 0; i < mRNA.length(); i += 3) {
+		protein += MRNA_CODON_TO_PROTEIN[mRNA.substr(i, 3)];
+	}
+
+  return protein;
 };
