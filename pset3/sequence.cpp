@@ -6,25 +6,38 @@ Sequence::Sequence(std::string description, std::string bases) {
   this->basesReverse = reverseStrand(bases);
 }
 
-std::string reverseStrand(std::string strandBases) {
-  std::string reverse = strandBases;
-
-  for (int i = 0; i < reverse.length(); i++) {
-    if (reverse[i] == 'A') { reverse[i] = 'T'; }
-    else if (reverse[i] == 'T') { reverse[i] = 'A'; }
-    else if (reverse[i] == 'C') { reverse[i] = 'G'; }
-    else if (reverse[i] == 'G') { reverse[i] = 'C'; }
-  }
-
-  return reverse;
-}
-
 void Sequence::findOpenReadingFrames() {
   // TODO: do this for the reverse strand:
   for (int i = 0; i < 3; i++) {
     this->findORFsInFrame(i, false);
     this->findORFsInFrame(i, true);
   }
+}
+
+void Sequence::writeReportToStream(std::ostream &out) {
+	std::vector<OpenReadingFrame>::iterator it;
+
+	for (int i=0; i < 3; i++) {
+		if (this->openReadingFramesDirect[i].size() > 0) {
+			for (it = this->openReadingFramesDirect[i].begin(); it != this->openReadingFramesDirect[i].end(); it++) {
+				(*it).writeReport(out);
+			}
+		}
+		else {
+			out << "No ORFs were found in reading frame " << i + 1 << " on the direct strand" << std::endl;
+		}
+	}
+
+	for (int i=0; i < 3; i++) {
+		if (this->openReadingFramesReverse[i].size() > 0) {
+			for (it = this->openReadingFramesReverse[i].begin(); it != this->openReadingFramesReverse[i].end(); it++) {
+				(*it).writeReport(out);
+			}
+		}
+		else {
+			out << "No ORFs were found in reading frame " << i + 1 << " on the reverse strand" << std::endl;
+		}
+	}
 }
 
 void Sequence::findORFsInFrame(int frame, bool reverse) {
@@ -59,9 +72,25 @@ void Sequence::findORFsInFrame(int frame, bool reverse) {
       std::string ORFBases = strand.substr(frameBeginIndex, (i + 3 - frameBeginIndex));
       OpenReadingFrame newORF = OpenReadingFrame(ORFBases, reverse ? "reverse": "direct", frameBeginIndex, i + 2, frame, numberOfORFsFound);
 
-      this->openReadingFrames.push_back(newORF);
+      if (reverse == false) { this->openReadingFramesDirect[frame].push_back(newORF); }
+      else { this->openReadingFramesReverse[frame].push_back(newORF); }
     }
   }
 
   return;
+}
+
+// Helper functions:
+
+std::string reverseStrand(std::string strandBases) {
+  std::string reverse = strandBases;
+
+  for (int i = 0; i < reverse.length(); i++) {
+    if (reverse[i] == 'A') { reverse[i] = 'T'; }
+    else if (reverse[i] == 'T') { reverse[i] = 'A'; }
+    else if (reverse[i] == 'C') { reverse[i] = 'G'; }
+    else if (reverse[i] == 'G') { reverse[i] = 'C'; }
+  }
+
+  return reverse;
 }

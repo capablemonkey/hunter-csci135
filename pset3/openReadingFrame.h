@@ -3,6 +3,7 @@
 
 #include <string>
 #include <iostream>  // TODO: remove this, only for debugging
+#include <map>
 
 class OpenReadingFrame {
 	private:
@@ -19,6 +20,7 @@ class OpenReadingFrame {
 	  OpenReadingFrame(std::string bases, std::string direction, int beginBaseIndex, int endBaseIndex, int readingFrame, int numberInReadingFrame);
 
 	  std::string translateToProteinSequence();
+	  void writeReport(std::ostream &out);
 };
 
 #endif

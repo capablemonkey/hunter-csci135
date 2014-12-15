@@ -18,13 +18,15 @@ class Sequence {
     std::string basesDirect;
     std::string basesReverse;
 
-    std::vector<OpenReadingFrame> openReadingFrames;
+    std::vector<OpenReadingFrame> openReadingFramesDirect[3];
+    std::vector<OpenReadingFrame> openReadingFramesReverse[3];
 
   public:
     Sequence(std::string description, std::string bases);
 
     void findOpenReadingFrames();
     void findORFsInFrame(int frame, bool reverse);
+    void writeReportToStream(std::ostream &out);
 };
 
 #endif
