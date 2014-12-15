@@ -82,15 +82,15 @@ void OpenReadingFrame::writeReport(std::ostream &out) {
   		<< " on the " << direction
   		<<" strand extends from base " << beginBaseIndex + 1
   		<< " to base " << endBaseIndex + 1
-  		<< std::endl;
+  		<< "\n";
 
- 	out << bases << std::endl << std::endl;
+ 	out << bases << "\n" << "\n";
  	out << ">Translation of ORF number " << numberInReadingFrame
  			<< " in reading frame " << readingFrame + 1
  			<< " on the " << direction
- 			<< " strand" << std::endl;
+ 			<< " strand" << "\n";
 
-  out << this->translateToProteinSequence() << std::endl << std::endl;
+  out << this->translateToProteinSequence() << "\n" << "\n";
 }
 
 std::string OpenReadingFrame::translateToProteinSequence() {

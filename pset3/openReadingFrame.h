@@ -3,6 +3,7 @@
 
 #include <string>
 #include <map>
+#include <iostream>
 #include <algorithm>	// std::replace()
 
 class OpenReadingFrame {

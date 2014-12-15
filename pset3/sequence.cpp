@@ -51,7 +51,7 @@ void Sequence::loadFromStream(std::istream &in) {
 void Sequence::writeReportToStream(std::ostream &out) {
   out << "ORF results for \"" << this->description 
       << "\" containing " << this->basesDirect.length()
-      << " bases" << std::endl << std::endl;
+      << " bases" << "\n" << "\n";
 
   // iterate through ORFs, report on each frame for direct and reverse:
   std::vector<OpenReadingFrame>::iterator it;
@@ -64,7 +64,7 @@ void Sequence::writeReportToStream(std::ostream &out) {
       }
     }
     else {
-      out << "No ORFs were found in reading frame " << i + 1 << " on the direct strand" << std::endl << std::endl;
+      out << "No ORFs were found in reading frame " << i + 1 << " on the direct strand" << "\n" << "\n";
     }
   }
 
@@ -76,7 +76,7 @@ void Sequence::writeReportToStream(std::ostream &out) {
       }
     }
     else {
-      out << "No ORFs were found in reading frame " << i + 1 << " on the reverse strand" << std::endl << std::endl;
+      out << "No ORFs were found in reading frame " << i + 1 << " on the reverse strand" << "\n" << "\n";
     }
   }
 }
