@@ -36,10 +36,19 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
+  // open output file for writing
+  std::ofstream outputFile;
+  outputFile.open(outputFileName.c_str(), std::ios_base::out);
+
+  if (outputFile.fail()) {
+    std::cerr << "ERROR: Could not open file for writing: " << outputFileName << std::endl;
+    return 1;
+  }
+
   Sequence sequence;
   sequence.loadFromStream(inputFile);
   sequence.findOpenReadingFrames();
-  sequence.writeReportToStream(std::cout);
+  sequence.writeReportToStream(outputFile);
 
   return 0;
 }
