@@ -11,7 +11,6 @@ Dependencies: none
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <vector>
 
 #include "sequence.h"
 #include "openReadingFrame.h"
@@ -49,7 +48,6 @@ Sequence createSequenceFromFile(std::string inputFileName) {
 
   // TODO normalize the case of the bases; convert to upper
 
-
   inputFile.close();
 
   return Sequence(description, bases);
@@ -64,6 +62,7 @@ int main(int argc, char *argv[]) {
   std::string inputFileName = argv[1];
   std::string outputFileName = argv[2];
 
+  // TODO: createSequenceFromFile should be a class method of Sequence, who gets passed the file stream
   Sequence sequence = createSequenceFromFile(inputFileName);
 
   sequence.findOpenReadingFrames();
