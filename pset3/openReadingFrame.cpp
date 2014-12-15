@@ -1,5 +1,6 @@
 #include "OpenReadingFrame.h"
 
+// map mapping MRNA codon to protein single letter code
 std::map<std::string, std::string> MRNA_CODON_TO_PROTEIN = {
 	{"UUU", "F"},
 	{"UUC", "F"},
