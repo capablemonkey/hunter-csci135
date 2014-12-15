@@ -10,8 +10,6 @@ Build with: make
 Dependencies: none
 ******************************************************************************/
 
-// TODO: write makefile
-
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -53,5 +51,7 @@ int main(int argc, char *argv[]) {
   sequence.findOpenReadingFrames();
   sequence.writeReportToStream(outputFile);
 
+  inputFile.close();
+  outputFile.close();
   return 0;
 }
