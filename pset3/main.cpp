@@ -2,9 +2,11 @@
 Title: DNA analysis
 Author: Gordon Zheng
 Created on: 2014-12-09
-Description:  TODO: fill this in
+Description:  Analyzes of FASTA format DNA sequence and outputs 
+              Open Reading Frames
 Usage: ./dna <inputFile> <outputFile>
-Build with: g++ -std=c++11 main.cpp sequence.cpp openReadingFrame.cpp -o dna
+Build with: make
+      (or) g++ -std=c++11 main.cpp sequence.cpp openReadingFrame.cpp -o dna
 Dependencies: none
 ******************************************************************************/
 
@@ -41,7 +43,8 @@ int main(int argc, char *argv[]) {
   outputFile.open(outputFileName.c_str(), std::ios_base::out);
 
   if (outputFile.fail()) {
-    std::cerr << "ERROR: Could not open file for writing: " << outputFileName << std::endl;
+    std::cerr << "ERROR: Could not open file for writing: " 
+              << outputFileName << std::endl;
     return 1;
   }
 
